@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PricePulse — Compare & Buy from Amazon, Flipkart, Myntra, Meesho</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+/* ═══ RESET & ROOT ═══════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070f;--surface:#0d0d1c;--card:#111120;--border:#1e1e34;
+  --accent:#7c6fff;--accent2:#ff5e78;--accent3:#2de2a2;
+  --text:#eeeef8;--muted:#6666a0;--tag:#181830;
+  --amazon:#FF9900;--flipkart:#2874F0;--myntra:#FF3F6C;--meesho:#9E3375;
+  --gold:#f5c842;--r:14px;
+}
+html,body{width:100%;min-height:100vh;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(124,111,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(124,111,255,.025) 1px,transparent 1px);background-size:50px 50px;pointer-events:none}
+.app{position:relative;z-index:1;max-width:1340px;margin:0 auto;padding:0 16px 80px}
+
+/* ═══ HEADER ═════════════════════════════════════ */
+header{background:rgba(7,7,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:300;padding:0 16px}
+.hdr{max-width:1340px;margin:0 auto;height:64px;display:flex;align-items:center;gap:14px}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;background:linear-gradient(135deg,var(--accent) 0%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;flex-shrink:0;cursor:pointer}
+.logo em{-webkit-text-fill-color:var(--accent2);font-style:normal}
+.hdr-search{flex:1;position:relative;min-width:0}
+.hdr-search input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:50px;padding:10px 16px 10px 44px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:.2s}
+.hdr-search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,111,255,.12)}
+.hdr-search input::placeholder{color:var(--muted)}
+.hdr-s-ico{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.hdr-btns{display:flex;gap:8px;flex-shrink:0}
+.ico-btn{background:var(--card);border:1px solid var(--border);color:var(--text);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;position:relative;font-size:1rem;flex-shrink:0}
+.ico-btn:hover{border-color:var(--accent);background:var(--tag)}
+.bdg{position:absolute;top:-4px;right:-4px;background:var(--accent2);color:#fff;font-size:.58rem;font-weight:800;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+/* ═══ HERO ═══════════════════════════════════════ */
+.hero{text-align:center;padding:40px 16px 28px;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(124,111,255,.12),transparent 60%)}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(124,111,255,.1);border:1px solid rgba(124,111,255,.22);border-radius:50px;padding:5px 14px;font-size:.72rem;color:#a78bfa;margin-bottom:16px;letter-spacing:.04em}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,5vw,3.2rem);font-weight:800;line-height:1.1;margin-bottom:12px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-sub{color:var(--muted);font-size:.95rem;max-width:520px;margin:0 auto 22px}
+.store-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+.sp{padding:5px 16px;border-radius:50px;font-size:.75rem;font-weight:600;border:1px solid;cursor:pointer;transition:.15s}
+.sp:hover{transform:translateY(-1px)}
+.sp-amazon{color:var(--amazon);border-color:rgba(255,153,0,.3);background:rgba(255,153,0,.07)}
+.sp-flipkart{color:var(--flipkart);border-color:rgba(40,116,240,.3);background:rgba(40,116,240,.07)}
+.sp-myntra{color:var(--myntra);border-color:rgba(255,63,108,.3);background:rgba(255,63,108,.07)}
+.sp-meesho{color:var(--meesho);border-color:rgba(158,51,117,.3);background:rgba(158,51,117,.07)}
+.hero-stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+.hstat-n{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;background:linear-gradient(135deg,var(--accent),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hstat-l{font-size:.72rem;color:var(--muted)}
+
+/* ═══ SEARCH BOX ═════════════════════════════════ */
+.search-section{max-width:700px;margin:0 auto 28px;padding:0 16px}
+.big-search-wrap{display:flex;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:.2s}
+.big-search-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,111,255,.12)}
+.big-search-wrap input{flex:1;background:none;border:none;padding:14px 18px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;min-width:0}
+.big-search-wrap input::placeholder{color:var(--muted)}
+.search-go{background:var(--accent);border:none;padding:0 28px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:.15s;white-space:nowrap;flex-shrink:0}
+.search-go:hover{opacity:.85}
+.search-go:disabled{opacity:.4;cursor:not-allowed}
+.qcats{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.qc{background:var(--tag);border:1px solid var(--border);border-radius:50px;padding:5px 13px;font-size:.76rem;cursor:pointer;transition:.15s;color:var(--muted)}
+.qc:hover,.qc.active-q{border-color:var(--accent);color:var(--accent);background:rgba(124,111,255,.08)}
+
+/* ═══ MAIN LAYOUT ════════════════════════════════ */
+.main{display:grid;grid-template-columns:256px 1fr;gap:22px;align-items:start}
+@media(max-width:820px){.main{grid-template-columns:1fr}}
+
+/* ═══ SIDEBAR ════════════════════════════════════ */
+.sidebar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;position:sticky;top:76px}
+@media(max-width:820px){.sidebar{display:none;position:static}.sidebar.mob-open{display:block}}
+.flt-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.flt-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.flt-clear{background:none;border:none;color:var(--accent);font-size:.75rem;cursor:pointer}
+.flt-sec{margin-bottom:18px}
+.flt-lbl{font-family:'Syne',sans-serif;font-weight:600;font-size:.83rem;margin-bottom:9px;color:var(--text)}
+.cat-list{display:flex;flex-direction:column;gap:5px}
+.cat-item{padding:7px 12px;background:var(--tag);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:.14s;font-size:.82rem;display:flex;justify-content:space-between;align-items:center}
+.cat-item:hover,.cat-item.active{border-color:var(--accent);background:rgba(124,111,255,.1);color:#a78bfa}
+.cat-cnt{font-size:.68rem;color:var(--muted);background:rgba(255,255,255,.05);padding:2px 7px;border-radius:20px}
+.price-row-flt{display:flex;gap:7px;align-items:center}
+.pinp{flex:1;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:8px 9px;color:var(--text);font-size:.8rem;outline:none;transition:.14s;width:0;font-family:'DM Sans',sans-serif}
+.pinp:focus{border-color:var(--accent)}
+.rng{width:100%;-webkit-appearance:none;height:3px;border-radius:2px;background:var(--border);outline:none;margin:10px 0 4px;cursor:pointer}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(124,111,255,.5);cursor:pointer}
+.chk-list{display:flex;flex-direction:column;gap:7px}
+.chk-item{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.82rem;padding:3px 0}
+.chk-item input{accent-color:var(--accent);width:14px;height:14px;cursor:pointer}
+.star-row{display:flex;align-items:center;gap:6px;cursor:pointer;padding:4px 7px;border-radius:6px;font-size:.8rem;transition:.12s}
+.star-row:hover{background:var(--tag)}
+.stars{color:var(--gold);letter-spacing:-2px;font-size:.9rem}
+.flt-apply{width:100%;background:var(--accent);border:none;border-radius:8px;padding:10px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;margin-top:6px;transition:.14s}
+.flt-apply:hover{opacity:.85}
+.mob-flt-btn{display:none;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 15px;color:var(--text);font-size:.85rem;cursor:pointer;margin-bottom:12px;transition:.14s}
+@media(max-width:820px){.mob-flt-btn{display:flex}}
+.mob-flt-btn:hover{border-color:var(--accent)}
+
+/* ═══ TOOLBAR ════════════════════════════════════ */
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.res-info{font-size:.83rem;color:var(--muted)}
+.res-info strong{color:var(--text)}
+.tool-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sort-sel{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;cursor:pointer}
+.vbtns{display:flex;gap:3px}
+.vbtn{background:var(--card);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:.12s}
+.vbtn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.aft{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.aft-tag{background:rgba(124,111,255,.1);border:1px solid rgba(124,111,255,.2);border-radius:20px;padding:3px 10px;font-size:.71rem;color:#a78bfa;display:flex;align-items:center;gap:4px}
+.aft-tag button{background:none;border:none;color:#a78bfa;cursor:pointer;font-size:.82rem;line-height:1}
+
+/* ═══ PRODUCTS GRID ══════════════════════════════ */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.pgrid.lv{grid-template-columns:1fr}
+
+/* ═══ PRODUCT CARD ═══════════════════════════════ */
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative}
+.pcard:hover{transform:translateY(-3px);box-shadow:0 14px 44px rgba(0,0,0,.45);border-color:rgba(124,111,255,.3)}
+.pcard.is-best{border-color:var(--gold)}
+.pcard.lv{display:flex;flex-direction:row}
+.best-badge{position:absolute;top:11px;left:11px;background:var(--gold);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:.62rem;padding:3px 9px;border-radius:20px;z-index:2;letter-spacing:.04em}
+.wish-btn{position:absolute;top:10px;right:10px;background:rgba(7,7,15,.7);border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;color:var(--muted);transition:.15s;font-size:1.05rem}
+.wish-btn:hover{color:var(--accent2);background:rgba(255,94,120,.12)}
+.wish-btn.on{color:var(--accent2)}
+.pimg-wrap{background:linear-gradient(135deg,#12122a,#181830);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;position:relative;height:185px;flex-shrink:0}
+.pcard.lv .pimg-wrap{width:140px;height:auto}
+.pimg-emoji{font-size:4.5rem;line-height:1}
+.pimg-real{width:100%;height:100%;object-fit:contain;padding:12px}
+.dtag{position:absolute;bottom:8px;right:8px;background:var(--accent2);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.68rem;padding:2px 8px;border-radius:20px}
+.store-strip{position:absolute;bottom:8px;left:8px;display:flex;gap:4px}
+.sstrip-dot{width:8px;height:8px;border-radius:50%}
+.pbody{padding:14px}
+.pbrand{font-size:.67rem;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.pname{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;margin-bottom:7px;line-height:1.3}
+.pspecs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:9px}
+.schip{background:var(--tag);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:.66rem;color:var(--muted)}
+.prating{display:flex;align-items:center;gap:5px;margin-bottom:9px;font-size:.78rem}
+.sstar{color:var(--gold)}
+.rcnt{color:var(--muted);font-size:.72rem}
+.pmrp{font-size:.7rem;color:var(--muted);margin-bottom:3px}
+.pbest-price{font-family:'Syne',sans-serif;font-weight:800;font-size:1.25rem;color:var(--accent3);margin-bottom:10px}
+.ptbl{background:var(--surface);border-radius:8px;overflow:hidden;margin-bottom:11px;border:1px solid var(--border)}
+.ptbl-row{display:flex;align-items:center;justify-content:space-between;padding:7px 11px;border-bottom:1px solid var(--border);font-size:.77rem;transition:background .1s;text-decoration:none;color:var(--text)}
+.ptbl-row:last-child{border-bottom:none}
+.ptbl-row:hover{background:var(--tag)}
+.ptbl-row.cheap{background:rgba(45,226,162,.05)}
+.ptbl-row.cheap:hover{background:rgba(45,226,162,.09)}
+.sname-wrap{display:flex;align-items:center;gap:6px}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.pamt{font-family:'Syne',sans-serif;font-weight:700;font-size:.87rem}
+.ptbl-row.cheap .pamt{color:var(--accent3)}
+.buy-link{font-size:.65rem;color:var(--accent);text-decoration:none;opacity:.7;white-space:nowrap}
+.buy-link:hover{opacity:1}
+.pfoot{display:flex;gap:7px}
+.btn-cmp{flex:1;background:transparent;border:1px solid var(--border);border-radius:7px;padding:9px;color:var(--text);font-size:.76rem;cursor:pointer;transition:.13s}
+.btn-cmp:hover{border-color:var(--accent);color:var(--accent)}
+.btn-view{flex:2;background:var(--accent);border:none;border-radius:7px;padding:9px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;transition:.13s}
+.btn-view:hover{opacity:.84}
+
+/* ═══ LOADING ════════════════════════════════════ */
+.loading-wrap{text-align:center;padding:64px 20px;grid-column:1/-1}
+.spin-ring{width:56px;height:56px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--accent);animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-txt{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:6px}
+.load-sub{color:var(--muted);font-size:.84rem}
+.store-dots{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.sdot2{width:9px;height:9px;border-radius:50%;animation:bup .7s ease-in-out infinite}
+.sdot2:nth-child(2){animation-delay:.12s}
+.sdot2:nth-child(3){animation-delay:.24s}
+.sdot2:nth-child(4){animation-delay:.36s}
+@keyframes bup{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-6px);opacity:1}}
+
+/* ═══ EMPTY ══════════════════════════════════════ */
+.empty-state{text-align:center;padding:70px 20px;grid-column:1/-1;color:var(--muted)}
+.empty-ico{font-size:3.2rem;margin-bottom:14px}
+.empty-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;color:var(--text);margin-bottom:8px}
+
+/* ═══ MODAL ══════════════════════════════════════ */
+.moverlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(12px)}
+.moverlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:20px;max-width:860px;width:100%;max-height:92vh;overflow-y:auto;animation:mIn .22s ease}
+@keyframes mIn{from{opacity:0;transform:scale(.95) translateY(12px)}to{opacity:1;transform:none}}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 0}
+.modal-brand-tag{font-size:.68rem;color:var(--accent);text-transform:uppercase;letter-spacing:.12em}
+.modal-close{background:var(--tag);border:1px solid var(--border);color:var(--muted);width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.14s;font-size:1rem}
+.modal-close:hover{color:var(--text)}
+.modal-body{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:20px 24px 28px}
+@media(max-width:640px){.modal-body{grid-template-columns:1fr}}
+.modal-img-box{background:linear-gradient(135deg,#12122a,#181830);border-radius:14px;display:flex;align-items:center;justify-content:center;min-height:220px;font-size:6rem}
+.modal-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;margin-bottom:10px;line-height:1.25}
+.modal-stars{display:flex;align-items:center;gap:7px;margin-bottom:12px;font-size:.85rem}
+.modal-desc{font-size:.84rem;color:var(--muted);line-height:1.7;margin-bottom:16px}
+.modal-specs-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.mspec-k{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.mspec-v{font-size:.83rem;font-weight:500}
+.modal-price-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px}
+.mprow{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface);border-radius:9px;margin-bottom:7px;border:1px solid var(--border);transition:.14s}
+.mprow:hover{border-color:var(--accent)}
+.mprow.best-mprow{border-color:var(--accent3);background:rgba(45,226,162,.05)}
+.mstore-info{display:flex;align-items:center;gap:10px}
+.mstore-ico{width:30px;height:30px;background:var(--tag);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.mstore-name{font-weight:500;font-size:.84rem}
+.mstore-tag{font-size:.67rem;color:var(--accent3)}
+.mprow-right{display:flex;align-items:center;gap:10px}
+.mpval{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem}
+.mprow.best-mprow .mpval{color:var(--accent3)}
+.buy-now-btn{background:none;border:1px solid;border-radius:7px;padding:6px 14px;font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;cursor:pointer;transition:.14s;text-decoration:none;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.buy-now-btn:hover{opacity:.8;transform:scale(1.02)}
+.modal-cta{display:flex;gap:10px;margin-top:14px}
+.m-wish-btn{flex:1;background:transparent;border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:.84rem;cursor:pointer;transition:.14s}
+.m-wish-btn:hover{border-color:var(--accent2);color:var(--accent2)}
+.m-cart-btn{flex:2;background:linear-gradient(135deg,var(--accent),#a78bfa);border:none;border-radius:10px;padding:12px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:.14s}
+.m-cart-btn:hover{opacity:.85}
+
+/* ═══ CART PANEL ═════════════════════════════════ */
+.side-panel{position:fixed;right:0;top:0;bottom:0;width:350px;background:var(--surface);border-left:1px solid var(--border);z-index:600;transform:translateX(100%);transition:transform .28s ease;display:flex;flex-direction:column}
+.side-panel.open{transform:none}
+@media(max-width:400px){.side-panel{width:100%}}
+.sp-hdr{padding:20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sp-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem}
+.sp-body{flex:1;overflow-y:auto;padding:14px}
+.sp-empty{text-align:center;padding:52px 20px;color:var(--muted)}
+.sp-empty-ico{font-size:2.8rem;margin-bottom:10px}
+.ci{display:flex;gap:11px;padding:12px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.ci-img{font-size:1.8rem;width:46px;height:46px;background:var(--card);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-weight:500;font-size:.83rem;margin-bottom:3px;line-height:1.3}
+.ci-meta{font-size:.71rem;color:var(--muted);margin-bottom:4px}
+.ci-price{font-family:'Syne',sans-serif;font-weight:700;color:var(--accent3);font-size:.9rem}
+.ci-actions{display:flex;gap:6px;margin-top:6px}
+.ci-buy-link{font-size:.7rem;background:var(--accent);color:#fff;padding:4px 10px;border-radius:6px;text-decoration:none;font-family:'Syne',sans-serif;font-weight:700;transition:.13s}
+.ci-buy-link:hover{opacity:.85}
+.ci-rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;transition:.14s;flex-shrink:0;padding:2px}
+.ci-rm:hover{color:var(--accent2)}
+.sp-footer{padding:16px;border-top:1px solid var(--border)}
+.sp-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sp-total-lbl{font-size:.82rem;color:var(--muted)}
+.sp-total-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem}
+.sp-checkout{width:100%;background:linear-gradient(135deg,var(--accent),#a78bfa);border:none;border-radius:10px;padding:13px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:.14s}
+.sp-checkout:hover{opacity:.84}
+
+/* ═══ COMPARE BAR ════════════════════════════════ */
+.cmpbar{position:fixed;bottom:0;left:0;right:0;z-index:400;background:rgba(13,13,28,.97);backdrop-filter:blur(16px);border-top:1px solid var(--border);padding:12px 20px;display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.cmpbar.vis{display:flex}
+.cmp-slots{display:flex;gap:8px;align-items:center}
+.cmp-slot{width:68px;height:68px;background:var(--card);border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.6rem;color:var(--muted);gap:2px;position:relative}
+.cmp-slot.filled{border-style:solid;border-color:var(--accent)}
+.cmp-slot-img{font-size:1.5rem}
+.cmp-slot-name{font-size:.58rem;text-align:center;line-height:1.2;padding:0 3px;overflow:hidden;max-height:2.4em}
+.cmp-x{position:absolute;top:-5px;right:-5px;background:var(--accent2);color:#fff;border:none;width:15px;height:15px;border-radius:50%;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cmp-actions{display:flex;gap:8px;align-items:center}
+.cmp-go{background:var(--accent);border:none;border-radius:7px;padding:10px 18px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer}
+.cmp-go:hover{opacity:.84}
+.cmp-clr{background:none;border:1px solid var(--border);border-radius:7px;padding:8px 12px;color:var(--muted);font-size:.78rem;cursor:pointer}
+.cmpview{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:18px;display:none}
+.cmpview.vis{display:block}
+.cmptbl{width:100%;border-collapse:collapse}
+.cmptbl th,.cmptbl td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);font-size:.8rem}
+.cmptbl th{background:var(--surface);font-family:'Syne',sans-serif;font-weight:700;color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.07em}
+.row-lbl{color:var(--muted);font-size:.75rem;width:100px}
+.best-cell{color:var(--accent3);font-weight:700}
+
+/* ═══ TOAST ══════════════════════════════════════ */
+.twrap{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;display:flex;align-items:center;gap:9px;box-shadow:0 8px 28px rgba(0,0,0,.4);min-width:210px;animation:tIn .22s ease}
+@keyframes tIn{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:none}}
+.t-ico{font-size:1rem}
+.t-msg{font-size:.81rem}
+
+/* ═══ REDIRECT MODAL ═════════════════════════════ */
+.redirect-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;backdrop-filter:blur(16px)}
+.redirect-overlay.open{display:flex}
+.redirect-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 32px;text-align:center;max-width:400px;width:90%;animation:mIn .22s ease}
+.redirect-icon{font-size:3.5rem;margin-bottom:14px}
+.redirect-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:8px}
+.redirect-sub{color:var(--muted);font-size:.88rem;margin-bottom:22px;line-height:1.6}
+.redirect-store-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;text-decoration:none;margin-bottom:10px;transition:.15s}
+.redirect-store-btn:hover{transform:translateY(-1px);opacity:.9}
+.redirect-cancel{background:none;border:1px solid var(--border);color:var(--muted);width:100%;padding:11px;border-radius:10px;font-size:.84rem;cursor:pointer;transition:.14s}
+.redirect-cancel:hover{border-color:var(--muted);color:var(--text)}
+
+/* ═══ SCROLLBAR ══════════════════════════════════ */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ═══ PRICE DISCLAIMER ══════════════════════════════ */
+.price-disclaimer{text-align:center;padding:8px 16px;font-size:.75rem;color:var(--muted);margin-bottom:10px;display:none}
+.price-disclaimer.visible{display:block}
+.price-disclaimer-inner{display:inline-flex;align-items:center;gap:6px;background:rgba(255,159,10,.07);border:1px solid rgba(255,159,10,.18);border-radius:8px;padding:7px 14px;color:rgba(255,200,80,.75)}
+
+/* ═══ PRICE UPDATED TEXT ════════════════════════════ */
+.price-updated{font-size:.62rem;color:var(--muted);margin-top:1px;line-height:1.2}
+.price-updated.fresh{color:rgba(45,226,162,.7)}
+.price-updated.stale{color:rgba(255,159,10,.65)}
+
+/* ═══ PRICE RANGE DISPLAY ═══════════════════════════ */
+.price-range{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:var(--accent3);margin-bottom:4px}
+.price-range-label{font-size:.63rem;color:var(--muted);margin-bottom:8px}
+
+/* ═══ DEAL SCORE ════════════════════════════════════ */
+.deal-score{display:inline-flex;align-items:center;gap:5px;background:rgba(255,159,10,.1);border:1px solid rgba(255,159,10,.25);border-radius:6px;padding:3px 9px;font-size:.68rem;color:rgba(255,200,80,.9);font-weight:600;margin-bottom:8px}
+.deal-score.high{background:rgba(45,226,162,.1);border-color:rgba(45,226,162,.25);color:var(--accent3)}
+.deal-score.low{background:rgba(255,94,120,.08);border-color:rgba(255,94,120,.2);color:rgba(255,130,140,.85)}
+
+/* ═══ PRICE HISTORY NOTE ════════════════════════════ */
+.price-history-note{font-size:.73rem;color:var(--accent3);background:rgba(45,226,162,.06);border:1px solid rgba(45,226,162,.15);border-radius:6px;padding:6px 10px;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.price-history-note.no-drop{color:var(--muted);background:rgba(255,255,255,.03);border-color:var(--border)}
+
+/* ═══ MODAL UPDATED TIME ════════════════════════════ */
+.mprice-updated{font-size:.63rem;color:var(--muted);margin-top:2px}
+.mprice-updated.fresh{color:rgba(45,226,162,.7)}
+</style>
+</head>
+<body>
+
+<!-- ── REDIRECT MODAL ─────────────────────────── -->
+<div class="redirect-overlay" id="rOverlay">
+  <div class="redirect-card">
+    <div class="redirect-icon" id="rIcon">🛒</div>
+    <div class="redirect-title" id="rTitle">Taking you to the store</div>
+    <div class="redirect-sub" id="rSub">You're leaving PricePulse. Please verify the latest price on the store before completing your purchase.</div>
+    <a class="redirect-store-btn" id="rBtn" href="#" target="_blank" rel="noopener noreferrer" onclick="closeRedirect()">Open Store →</a>
+    <button class="redirect-cancel" onclick="closeRedirect()">Cancel</button>
+  </div>
+</div>
+
+<!-- ── MODAL ──────────────────────────────────── -->
+<div class="moverlay" id="moverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div id="mBrandTag" class="modal-brand-tag"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+
+<!-- ── CART PANEL ─────────────────────────────── -->
+<div class="side-panel" id="cartPanel">
+  <div class="sp-hdr"><span class="sp-title">🛒 Cart</span><button class="modal-close" onclick="togglePanel('cart')">✕</button></div>
+  <div class="sp-body" id="cartBody"></div>
+  <div id="cartFooter" style="display:none">
+    <div class="sp-footer">
+      <div class="sp-total-row"><span class="sp-total-lbl">Estimated Total</span><span class="sp-total-val" id="cartTotal">₹0</span></div>
+      <button class="sp-checkout" onclick="checkoutAll()">Proceed to Checkout →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── WISHLIST PANEL ─────────────────────────── -->
+<div class="side-panel" id="wishPanel">
+  <div class="sp-hdr"><span class="sp-title">♡ Wishlist</span><button class="modal-close" onclick="togglePanel('wish')">✕</button></div>
+  <div class="sp-body" id="wishBody"></div>
+</div>
+
+<!-- ── COMPARE BAR ────────────────────────────── -->
+<div class="cmpbar" id="cmpBar">
+  <div>
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.83rem;margin-bottom:6px">⇄ Compare Products</div>
+    <div class="cmp-slots" id="cmpSlots"></div>
+  </div>
+  <div class="cmp-actions">
+    <button class="cmp-clr" onclick="clearCmp()">Clear</button>
+    <button class="cmp-go" onclick="showCmpView()">Compare Now →</button>
+  </div>
+</div>
+
+<!-- ── TOASTS ─────────────────────────────────── -->
+<div class="twrap" id="twrap"></div>
+
+<!-- ── HEADER ─────────────────────────────────── -->
+<header>
+  <div class="hdr">
+    <div class="logo" onclick="resetHome()">Price<em>Pulse</em></div>
+    <div class="hdr-search">
+      <svg class="hdr-s-ico" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="hdrInp" placeholder="Search products…" oninput="hdrSearchInput(this.value)" onkeydown="if(event.key==='Enter')runSearch(this.value)">
+    </div>
+    <div class="hdr-btns">
+      <button class="ico-btn" onclick="togglePanel('wish')" title="Wishlist">♡<span class="bdg" id="wBdg" style="display:none">0</span></button>
+      <button class="ico-btn" onclick="togglePanel('cart')" title="Cart">🛒<span class="bdg" id="cBdg" style="display:none">0</span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ APP ══════════════════════════ -->
+<div class="app">
+
+<!-- HERO -->
+<div class="hero" id="heroSection">
+  <div class="hero-eyebrow">✦ Track prices · Compare smartly · Verify before you buy</div>
+  <h1>Shop <em>Smarter,</em><br>Save More</h1>
+  <p class="hero-sub">Compare prices across Amazon, Flipkart, Myntra & Meesho. Find the best deal, add to cart, and buy directly on the store.</p>
+  <div class="store-pills">
+    <span class="sp sp-amazon" onclick="filterByStore('amazon')">📦 Amazon</span>
+    <span class="sp sp-flipkart" onclick="filterByStore('flipkart')">🛍️ Flipkart</span>
+    <span class="sp sp-myntra" onclick="filterByStore('myntra')">👗 Myntra</span>
+    <span class="sp sp-meesho" onclick="filterByStore('meesho')">🛒 Meesho</span>
+  </div>
+  <div class="hero-stats">
+    <div><div class="hstat-n" id="statProducts">200+</div><div class="hstat-l">Products</div></div>
+    <div><div class="hstat-n">4</div><div class="hstat-l">Stores</div></div>
+    <div><div class="hstat-n">Free</div><div class="hstat-l">No Sign-up</div></div>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-section">
+  <div class="big-search-wrap">
+    <input type="text" id="bigInp" placeholder="Search iPhone, Nike shoes, Samsung TV, kurta…" onkeydown="if(event.key==='Enter')runSearch(this.value)">
+    <button class="search-go" id="searchGoBtn" onclick="runSearch(document.getElementById('bigInp').value)">Search →</button>
+  </div>
+  <div class="qcats" id="qcats">
+    <span class="qc" onclick="runSearch('smartphones')">📱 Smartphones</span>
+    <span class="qc" onclick="runSearch('laptops')">💻 Laptops</span>
+    <span class="qc" onclick="runSearch('headphones')">🎧 Headphones</span>
+    <span class="qc" onclick="runSearch('t-shirts men')">👕 T-Shirts</span>
+    <span class="qc" onclick="runSearch('sneakers')">👟 Sneakers</span>
+    <span class="qc" onclick="runSearch('saree')">🥻 Sarees</span>
+    <span class="qc" onclick="runSearch('smartwatch')">⌚ Smartwatches</span>
+    <span class="qc" onclick="runSearch('tablets')">📲 Tablets</span>
+    <span class="qc" onclick="runSearch('kurta')">👘 Kurtas</span>
+    <span class="qc" onclick="runSearch('earphones wireless')">🎵 Earphones</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="mainSection">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="flt-hdr">
+      <span class="flt-title">⚙ Filters</span>
+      <button class="flt-clear" onclick="clearAllFilters()">Clear all</button>
+    </div>
+    <div class="flt-sec">
+      <div class="flt-lbl">Category</div>
+      <div class="cat-list" id="catList"><div class="cat-item active" onclick="setCategory('All',this)">All<span class="cat-cnt" id="allCnt">0</span></div></div>
+    </div>
+    <div class="flt-sec">
+      <div class="flt-lbl">Price Range (₹)</div>
+      <div class="price-row-flt">
+        <input class="pinp" type="number" id="pMin" placeholder="Min" value="0">
+        <span style="color:var(--muted);font-size:.8rem">—</span>
+        <input class="pinp" type="number" id="pMax" placeholder="Max" value="500000">
+      </div>
+      <input class="rng" type="range" id="pSlider" min="0" max="500000" value="500000" step="500" oninput="document.getElementById('pMax').value=this.value;applyFilters()">
+    </div>
+    <div class="flt-sec">
+      <div class="flt-lbl">Brand</div>
+      <div class="chk-list" id="brandList"></div>
+    </div>
+    <div class="flt-sec">
+      <div class="flt-lbl">Min Rating</div>
+      <div>
+        <label class="star-row"><input type="radio" name="rtg" value="0" checked onchange="applyFilters()"> <span class="stars">★★★★★</span> All</label>
+        <label class="star-row"><input type="radio" name="rtg" value="4" onchange="applyFilters()"> <span class="stars">★★★★</span> 4+</label>
+        <label class="star-row"><input type="radio" name="rtg" value="3" onchange="applyFilters()"> <span class="stars">★★★</span> 3+</label>
+      </div>
+    </div>
+    <div class="flt-sec">
+      <div class="flt-lbl">Store</div>
+      <div class="chk-list">
+        <label class="chk-item"><input type="checkbox" value="amazon" onchange="applyFilters()"> 📦 Amazon</label>
+        <label class="chk-item"><input type="checkbox" value="flipkart" onchange="applyFilters()"> 🛍️ Flipkart</label>
+        <label class="chk-item"><input type="checkbox" value="myntra" onchange="applyFilters()"> 👗 Myntra</label>
+        <label class="chk-item"><input type="checkbox" value="meesho" onchange="applyFilters()"> 🛒 Meesho</label>
+      </div>
+    </div>
+    <button class="flt-apply" onclick="applyFilters()">Apply Filters</button>
+  </aside>
+
+  <!-- CONTENT -->
+  <div>
+    <button class="mob-flt-btn" onclick="document.getElementById('sidebar').classList.toggle('mob-open')">⚙ Filters</button>
+    <div class="toolbar" id="toolbar" style="display:none">
+      <div class="res-info" id="resInfo"></div>
+      <div class="tool-right">
+        <select class="sort-sel" id="sortSel" onchange="applyFilters()">
+          <option value="best">Best Deal</option>
+          <option value="priceLow">Price ↑</option>
+          <option value="priceHigh">Price ↓</option>
+          <option value="rating">Top Rated</option>
+          <option value="disc">Discount %</option>
+        </select>
+        <div class="vbtns">
+          <button class="vbtn active" onclick="setView('grid',this)" title="Grid">⊞</button>
+          <button class="vbtn" onclick="setView('list',this)" title="List">☰</button>
+        </div>
+      </div>
+    </div>
+    <div class="aft" id="aftWrap"></div>
+    <div class="cmpview" id="cmpView"></div>
+    <div class="price-disclaimer" id="priceDisclaimer">
+      <div class="price-disclaimer-inner">
+        ⚠ Prices are indicative and may change. Click 'Check Latest Price' to verify on store before buying.
+      </div>
+    </div>
+    <div class="pgrid" id="pgrid">
+      <div class="empty-state">
+        <div class="empty-ico">🔍</div>
+        <div class="empty-title">Search for any product</div>
+        <div style="color:var(--muted);font-size:.88rem">Type a product name or tap a category above</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- /app -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   STORE CONFIG
+═══════════════════════════════════════════════════════════ */
+const STORES = {
+  amazon:   { name:'Amazon',   emoji:'📦', color:'#FF9900', bg:'rgba(255,153,0,.08)',   btnBg:'#FF9900', btnColor:'#000', searchUrl: q=>`https://www.amazon.in/s?k=${encodeURIComponent(q)}` },
+  flipkart: { name:'Flipkart', emoji:'🛍️', color:'#2874F0', bg:'rgba(40,116,240,.08)', btnBg:'#2874F0', btnColor:'#fff', searchUrl: q=>`https://www.flipkart.com/search?q=${encodeURIComponent(q)}` },
+  myntra:   { name:'Myntra',   emoji:'👗', color:'#FF3F6C', bg:'rgba(255,63,108,.08)', btnBg:'#FF3F6C', btnColor:'#fff', searchUrl: q=>`https://www.myntra.com/${encodeURIComponent(q)}` },
+  meesho:   { name:'Meesho',   emoji:'🛒', color:'#9E3375', bg:'rgba(158,51,117,.08)', btnBg:'#9E3375', btnColor:'#fff', searchUrl: q=>`https://meesho.com/search?q=${encodeURIComponent(q)}` },
+};
+
+/* ═══════════════════════════════════════════════════════════
+   PRODUCT DATABASE  — real products with store search URLs
+   Each product has "prices" with keys matching STORES,
+   and "urls" with direct search/product deep-links.
+═══════════════════════════════════════════════════════════ */
+const DB = [
+  /* ── SMARTPHONES ─────────────────────────────────────── */
+  { id:1, cat:'Smartphones', brand:'Apple', emoji:'📱', name:'Apple iPhone 15', mrp:79900, rating:4.7, reviews:42100,
+    desc:'6.1" Super Retina XDR display, A16 Bionic chip, 48MP main camera with 2x optical zoom. Dynamic Island and USB-C.',
+    specs:{Display:'6.1" OLED',Chip:'A16 Bionic',Camera:'48MP Main',Storage:'128GB',RAM:'6GB',Battery:'3877mAh','5G':'Yes',OS:'iOS 17'},
+    tags:['A16 Bionic','USB-C','48MP'],
+    prices:{amazon:{price:74900,updated:"2026-04-10T09:30:00",history:[77521,76023,74900]},flipkart:{price:75900,updated:"2026-04-09T14:15:00",history:[78556,77038,75900]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Apple+iPhone+15',flipkart:'https://www.flipkart.com/search?q=Apple+iPhone+15'}},
+
+  { id:2, cat:'Smartphones', brand:'Apple', emoji:'📱', name:'Apple iPhone 15 Pro', mrp:134900, rating:4.8, reviews:28700,
+    desc:'Titanium design, A17 Pro chip, 48MP ProCamera system with 3x optical zoom, Action button and USB 3.',
+    specs:{Display:'6.1" ProMotion',Chip:'A17 Pro',Camera:'48MP 3x Zoom',Storage:'128GB',RAM:'8GB',Battery:'3274mAh','5G':'Yes',OS:'iOS 17'},
+    tags:['A17 Pro','Titanium','ProCamera'],
+    prices:{amazon:{price:119900,updated:"2026-04-07T18:20:00",history:[124096,121698,119900]},flipkart:{price:122900,updated:"2026-04-11T07:00:00",history:[127201,124743,122900]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Apple+iPhone+15+Pro',flipkart:'https://www.flipkart.com/search?q=Apple+iPhone+15+Pro'}},
+
+  { id:3, cat:'Smartphones', brand:'Samsung', emoji:'📱', name:'Samsung Galaxy S24', mrp:79999, rating:4.6, reviews:18400,
+    desc:'Galaxy AI features, 6.2" Dynamic AMOLED 2X, Snapdragon 8 Gen 3 for Galaxy, 50MP camera with AI editing.',
+    specs:{Display:'6.2" AMOLED 120Hz',Chip:'Snapdragon 8 Gen 3',Camera:'50MP',Storage:'256GB',RAM:'8GB',Battery:'4000mAh','5G':'Yes',OS:'Android 14'},
+    tags:['Galaxy AI','Snapdragon 8 Gen 3','50MP'],
+    prices:{amazon:{price:69999,updated:"2026-04-11T16:30:00",history:[72448,71048,69999]},flipkart:{price:71999,updated:"2026-04-10T08:00:00",history:[74518,73078,71999]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Samsung+Galaxy+S24',flipkart:'https://www.flipkart.com/search?q=Samsung+Galaxy+S24'}},
+
+  { id:4, cat:'Smartphones', brand:'Samsung', emoji:'📱', name:'Samsung Galaxy S24 Ultra', mrp:134999, rating:4.8, reviews:14200,
+    desc:'Built-in S Pen, 200MP camera, Titanium frame, 12GB RAM, AI-powered features and 5000mAh battery.',
+    specs:{Display:'6.8" QHD+ AMOLED',Chip:'Snapdragon 8 Gen 3',Camera:'200MP + S Pen',Storage:'256GB',RAM:'12GB',Battery:'5000mAh','5G':'Yes',OS:'Android 14'},
+    tags:['S Pen','200MP','Galaxy AI'],
+    prices:{amazon:{price:119999,updated:"2026-04-08T13:00:00",history:[124198,121798,119999]},flipkart:{price:123999,updated:"2026-04-11T10:45:00",history:[128338,125858,123999]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Samsung+Galaxy+S24+Ultra',flipkart:'https://www.flipkart.com/search?q=Samsung+Galaxy+S24+Ultra'}},
+
+  { id:5, cat:'Smartphones', brand:'OnePlus', emoji:'📱', name:'OnePlus 12', mrp:69999, rating:4.6, reviews:22300,
+    desc:'Hasselblad cameras, Snapdragon 8 Gen 3, 5400mAh battery with 100W SuperVOOC charging, 6.82" LTPO AMOLED.',
+    specs:{Display:'6.82" LTPO AMOLED',Chip:'Snapdragon 8 Gen 3',Camera:'50MP Hasselblad',Storage:'256GB',RAM:'12GB',Battery:'5400mAh + 100W','5G':'Yes',OS:'Android 14'},
+    tags:['Hasselblad','100W Charge','LTPO'],
+    prices:{amazon:{price:59999,updated:"2026-04-10T09:30:00",history:[62098,60898,59999]},flipkart:{price:61999,updated:"2026-04-09T14:15:00",history:[64168,62928,61999]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=OnePlus+12',flipkart:'https://www.flipkart.com/search?q=OnePlus+12'}},
+
+  { id:6, cat:'Smartphones', brand:'Xiaomi', emoji:'📱', name:'Redmi Note 13 Pro+', mrp:35999, rating:4.5, reviews:31000,
+    desc:'200MP camera, Dimensity 7200 Ultra, 120W HyperCharge, 5000mAh battery, 6.67" curved AMOLED.',
+    specs:{Display:'6.67" AMOLED 120Hz',Chip:'Dimensity 7200 Ultra',Camera:'200MP',Storage:'256GB',RAM:'8GB',Battery:'5000mAh + 120W','5G':'Yes',OS:'MIUI 14'},
+    tags:['200MP','120W HyperCharge','Curved AMOLED'],
+    prices:{amazon:{price:29999,updated:"2026-04-07T18:20:00",history:[31048,30448,29999]},flipkart:{price:30999,updated:"2026-04-11T07:00:00",history:[32083,31463,30999]},myntra:null,meesho:{price:28999,updated:"2026-04-11T16:30:00",history:[30013,29433,28999]}},
+    urls:{amazon:'https://www.amazon.in/s?k=Redmi+Note+13+Pro+Plus',flipkart:'https://www.flipkart.com/search?q=Redmi+Note+13+Pro+Plus',meesho:'https://meesho.com/search?q=Redmi+Note+13+Pro'}},
+
+  { id:7, cat:'Smartphones', brand:'Vivo', emoji:'📱', name:'Vivo V30 Pro', mrp:44999, rating:4.4, reviews:9800,
+    desc:'50MP ZEISS portrait camera, 6.78" AMOLED, Snapdragon 7 Gen 3, 80W FlashCharge with elegant curved design.',
+    specs:{Display:'6.78" AMOLED 120Hz',Chip:'Snapdragon 7 Gen 3',Camera:'50MP ZEISS',Storage:'256GB',RAM:'12GB',Battery:'5000mAh + 80W','5G':'Yes',OS:'Android 14'},
+    tags:['ZEISS Portrait','80W Charge','Curved Display'],
+    prices:{amazon:{price:38999,updated:"2026-04-11T16:30:00",history:[40363,39583,38999]},flipkart:{price:39999,updated:"2026-04-10T08:00:00",history:[41398,40598,39999]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Vivo+V30+Pro',flipkart:'https://www.flipkart.com/search?q=Vivo+V30+Pro'}},
+
+  /* ── LAPTOPS ──────────────────────────────────────── */
+  { id:10, cat:'Laptops', brand:'Apple', emoji:'💻', name:'MacBook Air M3 13"', mrp:114900, rating:4.8, reviews:8700,
+    desc:'Apple M3 chip, 18-hour battery, 13.6" Liquid Retina display, fanless design, 8GB unified memory.',
+    specs:{Display:'13.6" Retina',Chip:'Apple M3',RAM:'8GB',Storage:'256GB SSD',Battery:'18 hr',Weight:'1.24 kg',OS:'macOS Sonoma',Ports:'2x USB-C'},
+    tags:['Apple M3','18hr Battery','Fanless'],
+    prices:{amazon:{price:104900,updated:"2026-04-08T13:00:00",history:[108571,106473,104900]},flipkart:{price:106900,updated:"2026-04-11T10:45:00",history:[110641,108503,106900]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=MacBook+Air+M3+13',flipkart:'https://www.flipkart.com/search?q=MacBook+Air+M3+13'}},
+
+  { id:11, cat:'Laptops', brand:'Dell', emoji:'💻', name:'Dell XPS 15 OLED', mrp:189990, rating:4.6, reviews:3400,
+    desc:'3.5K OLED touch display, Intel Core i9, 32GB DDR5, NVIDIA RTX 4070, premium aluminium build.',
+    specs:{Display:'15.6" 3.5K OLED',Processor:'Intel Core i9-13900H',RAM:'32GB DDR5',Storage:'1TB SSD',GPU:'RTX 4070',Battery:'86Whr',OS:'Windows 11',Weight:'1.86 kg'},
+    tags:['OLED Touch','RTX 4070','Core i9'],
+    prices:{amazon:{price:164990,updated:"2026-04-10T09:30:00",history:[170764,167464,164990]},flipkart:{price:169990,updated:"2026-04-09T14:15:00",history:[175939,172539,169990]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Dell+XPS+15+OLED',flipkart:'https://www.flipkart.com/search?q=Dell+XPS+15+OLED'}},
+
+  { id:12, cat:'Laptops', brand:'HP', emoji:'💻', name:'HP Spectre x360 14"', mrp:169990, rating:4.5, reviews:2100,
+    desc:'2-in-1 convertible, Intel Core Ultra 7, OLED touch display, 17-hour battery, built-in stylus.',
+    specs:{Display:'14" OLED Touch',Processor:'Intel Core Ultra 7',RAM:'16GB',Storage:'1TB SSD',Battery:'17 hr',Weight:'1.41 kg',OS:'Windows 11 Home',GPU:'Intel Arc'},
+    tags:['2-in-1','OLED Touch','Core Ultra 7'],
+    prices:{amazon:{price:154990,updated:"2026-04-07T18:20:00",history:[160414,157314,154990]},flipkart:{price:159990,updated:"2026-04-11T07:00:00",history:[165589,162389,159990]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=HP+Spectre+x360+14',flipkart:'https://www.flipkart.com/search?q=HP+Spectre+x360+14'}},
+
+  { id:13, cat:'Laptops', brand:'Lenovo', emoji:'💻', name:'Lenovo ThinkPad X1 Carbon', mrp:159990, rating:4.7, reviews:1900,
+    desc:'Ultra-light business laptop, Intel Core Ultra 5, 14" IPS anti-glare, MIL-SPEC durability, 15-hour battery.',
+    specs:{Display:'14" IPS 1920x1200',Processor:'Intel Core Ultra 5',RAM:'16GB LPDDR5',Storage:'512GB SSD',Weight:'1.12 kg',Battery:'57Whr',OS:'Windows 11 Pro',Ports:'2x TB4'},
+    tags:['Ultra-light','MIL-SPEC','Business'],
+    prices:{amazon:{price:139990,updated:"2026-04-11T16:30:00",history:[144889,142089,139990]},flipkart:{price:144990,updated:"2026-04-10T08:00:00",history:[150064,147164,144990]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Lenovo+ThinkPad+X1+Carbon',flipkart:'https://www.flipkart.com/search?q=Lenovo+ThinkPad+X1+Carbon'}},
+
+  { id:14, cat:'Laptops', brand:'ASUS', emoji:'💻', name:'ASUS ROG Zephyrus G16', mrp:174990, rating:4.6, reviews:4200,
+    desc:'AMD Ryzen 9, 16" QHD 240Hz OLED, NVIDIA RTX 4070, 32GB DDR5, best gaming laptop under 2kg.',
+    specs:{Display:'16" QHD 240Hz OLED',Processor:'AMD Ryzen 9 8945HS',RAM:'32GB DDR5',Storage:'1TB SSD',GPU:'RTX 4070',Battery:'90Whr',OS:'Windows 11 Home',Weight:'1.85 kg'},
+    tags:['ROG Gaming','RTX 4070','240Hz OLED'],
+    prices:{amazon:{price:154990,updated:"2026-04-08T13:00:00",history:[160414,157314,154990]},flipkart:{price:159990,updated:"2026-04-11T10:45:00",history:[165589,162389,159990]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=ASUS+ROG+Zephyrus+G16',flipkart:'https://www.flipkart.com/search?q=ASUS+ROG+Zephyrus+G16'}},
+
+  /* ── HEADPHONES ───────────────────────────────────── */
+  { id:20, cat:'Headphones', brand:'Sony', emoji:'🎧', name:'Sony WH-1000XM5', mrp:34990, rating:4.8, reviews:52000,
+    desc:'Industry-leading noise cancelling, 30-hour battery, crystal-clear hands-free calling, multipoint connection.',
+    specs:{Type:'Over-ear',ANC:'Yes',Battery:'30 hr',Driver:'30mm',Bluetooth:'5.2',Weight:'250g',Mic:'8 mics',Foldable:'Yes'},
+    tags:['Best ANC','30hr Battery','Foldable'],
+    prices:{amazon:{price:24990,updated:"2026-04-10T09:30:00",history:[25864,25364,24990]},flipkart:{price:25990,updated:"2026-04-09T14:15:00",history:[26899,26379,25990]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Sony+WH-1000XM5',flipkart:'https://www.flipkart.com/search?q=Sony+WH-1000XM5'}},
+
+  { id:21, cat:'Headphones', brand:'Apple', emoji:'🎧', name:'Apple AirPods Pro 2nd Gen', mrp:26900, rating:4.7, reviews:38000,
+    desc:'H2 chip, adaptive transparency, personalized spatial audio, up to 30hr battery (with case), MagSafe charging.',
+    specs:{Type:'In-ear',ANC:'Adaptive',Battery:'30hr (case)',Chip:'H2',Water:'IPX4',Case:'MagSafe','Spatial Audio':'Yes',Transparency:'Adaptive'},
+    tags:['H2 Chip','MagSafe','Spatial Audio'],
+    prices:{amazon:{price:19900,updated:"2026-04-07T18:20:00",history:[20596,20198,19900]},flipkart:{price:20900,updated:"2026-04-11T07:00:00",history:[21631,21213,20900]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=AirPods+Pro+2nd+Generation',flipkart:'https://www.flipkart.com/search?q=AirPods+Pro+2'}},
+
+  { id:22, cat:'Headphones', brand:'Bose', emoji:'🎧', name:'Bose QuietComfort 45', mrp:32000, rating:4.6, reviews:21000,
+    desc:'World-class noise cancellation, 24-hour battery, premium audio with TriPort acoustic architecture.',
+    specs:{Type:'Over-ear',ANC:'QuietComfort',Battery:'24 hr',Bluetooth:'5.1',Weight:'238g',Foldable:'Yes',Mic:'4 mics',USB:'USB-C'},
+    tags:['QuietComfort ANC','24hr Battery','Premium Audio'],
+    prices:{amazon:{price:26900,updated:"2026-04-11T16:30:00",history:[27841,27303,26900]},flipkart:{price:27990,updated:"2026-04-10T08:00:00",history:[28969,28409,27990]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Bose+QuietComfort+45',flipkart:'https://www.flipkart.com/search?q=Bose+QuietComfort+45'}},
+
+  { id:23, cat:'Headphones', brand:'JBL', emoji:'🎧', name:'JBL Tune 770NC', mrp:9999, rating:4.4, reviews:14000,
+    desc:'Adaptive Noise Cancelling, 70-hour playtime, JBL Pure Bass sound, multipoint connection, foldable design.',
+    specs:{Type:'Over-ear',ANC:'Adaptive',Battery:'70 hr',Bluetooth:'5.3',Weight:'219g',Foldable:'Yes',USB:'USB-C',Mic:'Yes'},
+    tags:['70hr Battery','Adaptive ANC','JBL Bass'],
+    prices:{amazon:{price:6999,updated:"2026-04-08T13:00:00",history:[7243,7103,6999]},flipkart:{price:7499,updated:"2026-04-11T10:45:00",history:[7761,7611,7499]},myntra:null,meesho:{price:6499,updated:"2026-04-10T09:30:00",history:[6726,6596,6499]}},
+    urls:{amazon:'https://www.amazon.in/s?k=JBL+Tune+770NC',flipkart:'https://www.flipkart.com/search?q=JBL+Tune+770NC',meesho:'https://meesho.com/search?q=JBL+Tune+770NC'}},
+
+  /* ── SMARTWATCHES ─────────────────────────────────── */
+  { id:30, cat:'Smartwatches', brand:'Apple', emoji:'⌚', name:'Apple Watch Series 9', mrp:41900, rating:4.7, reviews:22000,
+    desc:'Double tap gesture, S9 chip, brighter always-on Retina display, precision finding for iPhone, crash detection.',
+    specs:{Display:'45mm OLED',Chip:'S9 SiP',Battery:'18 hr',Health:'ECG, Blood O₂',GPS:'Yes',Water:'50m',Connectivity:'4G',Weight:'38.7g'},
+    tags:['Double Tap','S9 Chip','Health Hub'],
+    prices:{amazon:{price:37900,updated:"2026-04-10T09:30:00",history:[39226,38468,37900]},flipkart:{price:38999,updated:"2026-04-09T14:15:00",history:[40363,39583,38999]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Apple+Watch+Series+9',flipkart:'https://www.flipkart.com/search?q=Apple+Watch+Series+9'}},
+
+  { id:31, cat:'Smartwatches', brand:'Samsung', emoji:'⌚', name:'Samsung Galaxy Watch 6 Classic', mrp:39999, rating:4.5, reviews:11000,
+    desc:'Rotating bezel, advanced health monitoring, Galaxy AI sleep coaching, BioActive sensor, 40hr battery.',
+    specs:{Display:'47mm AMOLED',Chip:'Exynos W930',Battery:'40 hr',Health:'BioActive Sensor',GPS:'Yes',Water:'5ATM',Connectivity:'4G',Weight:'59g'},
+    tags:['Rotating Bezel','Galaxy AI','BioActive'],
+    prices:{amazon:{price:32999,updated:"2026-04-07T18:20:00",history:[34153,33493,32999]},flipkart:{price:34999,updated:"2026-04-11T07:00:00",history:[36223,35523,34999]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Samsung+Galaxy+Watch+6+Classic',flipkart:'https://www.flipkart.com/search?q=Samsung+Galaxy+Watch+6+Classic'}},
+
+  { id:32, cat:'Smartwatches', brand:'Garmin', emoji:'⌚', name:'Garmin Fenix 7 Pro', mrp:89990, rating:4.7, reviews:4300,
+    desc:'Solar-powered rugged GPS watch, 22-day battery, tri-band GPS, training status, built-in flashlight.',
+    specs:{Display:'1.3" MIP',Chip:'Multi-Band GPS',Battery:'22 days solar',Health:'SpO2, HRV',Rugged:'MIL-STD-810',Water:'100m',Weight:'79g',Connectivity:'Bluetooth 5.0'},
+    tags:['Solar Battery','Tri-Band GPS','Rugged'],
+    prices:{amazon:{price:74990,updated:"2026-04-11T16:30:00",history:[77614,76114,74990]},flipkart:{price:79990,updated:"2026-04-10T08:00:00",history:[82789,81189,79990]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Garmin+Fenix+7+Pro',flipkart:'https://www.flipkart.com/search?q=Garmin+Fenix+7+Pro'}},
+
+  /* ── TABLETS ──────────────────────────────────────── */
+  { id:40, cat:'Tablets', brand:'Apple', emoji:'📲', name:'iPad Pro M4 11"', mrp:99900, rating:4.8, reviews:9100,
+    desc:'Ultra Retina XDR OLED display, M4 chip, Apple Pencil Pro support, thinnest iPad ever at 5.1mm.',
+    specs:{Display:'11" Ultra Retina XDR OLED',Chip:'Apple M4',RAM:'8GB',Storage:'256GB',Battery:'10 hr',Pencil:'Apple Pencil Pro',OS:'iPadOS 17',Weight:'444g'},
+    tags:['Apple M4','Ultra Retina XDR','Thinnest iPad'],
+    prices:{amazon:{price:93900,updated:"2026-04-08T13:00:00",history:[97186,95308,93900]},flipkart:{price:96900,updated:"2026-04-11T10:45:00",history:[100291,98353,96900]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=iPad+Pro+M4+11',flipkart:'https://www.flipkart.com/search?q=iPad+Pro+M4+11'}},
+
+  { id:41, cat:'Tablets', brand:'Samsung', emoji:'📲', name:'Samsung Galaxy Tab S9+', mrp:99999, rating:4.6, reviews:6200,
+    desc:'12.4" Dynamic AMOLED 2X, Snapdragon 8 Gen 2, S Pen included, DeX mode, IP68 water resistance.',
+    specs:{Display:'12.4" AMOLED 2X',Chip:'Snapdragon 8 Gen 2',RAM:'12GB',Storage:'256GB',Battery:'10090mAh',SPen:'Included',OS:'Android 14',Weight:'581g'},
+    tags:['S Pen','DeX Mode','IP68'],
+    prices:{amazon:{price:84999,updated:"2026-04-10T09:30:00",history:[87973,86273,84999]},flipkart:{price:89999,updated:"2026-04-09T14:15:00",history:[93148,91348,89999]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Samsung+Galaxy+Tab+S9+Plus',flipkart:'https://www.flipkart.com/search?q=Samsung+Galaxy+Tab+S9+Plus'}},
+
+  /* ── FASHION — T-SHIRTS ───────────────────────────── */
+  { id:50, cat:'Fashion', brand:'Nike', emoji:'👕', name:'Nike Dri-FIT Men T-Shirt', mrp:2495, rating:4.5, reviews:18700,
+    desc:'Moisture-wicking Dri-FIT technology, breathable mesh, perfect for training and everyday wear.',
+    specs:{Material:'100% Polyester',Fit:'Standard',Technology:'Dri-FIT',Neck:'Round',Sleeve:'Short','Available Sizes':'S-3XL',Care:'Machine Wash',Origin:'Vietnam'},
+    tags:['Dri-FIT','Quick Dry','Training'],
+    prices:{amazon:{price:1399,updated:"2026-04-07T18:20:00",history:[1447,1419,1399]},flipkart:{price:1499,updated:"2026-04-11T07:00:00",history:[1551,1521,1499]},myntra:{price:1295,updated:"2026-04-06T22:10:00",history:[1340,1314,1295]},meesho:{price:899,updated:"2026-04-11T16:30:00",history:[930,912,899]}},
+    urls:{amazon:'https://www.amazon.in/s?k=Nike+Dri-FIT+men+t-shirt',flipkart:'https://www.flipkart.com/search?q=Nike+Dri-FIT+men+t-shirt',myntra:'https://www.myntra.com/tshirts/nike',meesho:'https://meesho.com/search?q=nike+dri+fit+tshirt'}},
+
+  { id:51, cat:'Fashion', brand:'Adidas', emoji:'👕', name:'Adidas Essentials 3-Stripes T-Shirt', mrp:2499, rating:4.4, reviews:22000,
+    desc:'Classic 3-stripes design, soft cotton jersey, versatile style for sport and casual wear.',
+    specs:{Material:'70% Cotton 30% Recycled Polyester',Fit:'Regular',Technology:'Climalite',Neck:'Round',Sleeve:'Short','Available Sizes':'XS-4XL',Care:'Machine Wash',Origin:'Bangladesh'},
+    tags:['3-Stripes','Climalite','Recycled'],
+    prices:{amazon:{price:1199,updated:"2026-04-11T16:30:00",history:[1240,1216,1199]},flipkart:{price:1299,updated:"2026-04-10T08:00:00",history:[1344,1318,1299]},myntra:{price:1199,updated:"2026-04-09T20:00:00",history:[1240,1216,1199]},meesho:{price:799,updated:"2026-04-08T13:00:00",history:[826,810,799]}},
+    urls:{amazon:'https://www.amazon.in/s?k=Adidas+Essentials+3+Stripes+T+Shirt',flipkart:'https://www.flipkart.com/search?q=Adidas+Essentials+t-shirt',myntra:'https://www.myntra.com/tshirts/adidas',meesho:'https://meesho.com/search?q=adidas+tshirt'}},
+
+  { id:52, cat:'Fashion', brand:'H&M', emoji:'👕', name:'H&M Cotton T-Shirt Pack (3)', mrp:1499, rating:4.3, reviews:34000,
+    desc:'Pack of 3 soft cotton t-shirts in assorted colours, relaxed fit, everyday essential.',
+    specs:{Material:'100% Cotton',Fit:'Relaxed',Pack:'3 pieces',Neck:'Round',Sleeve:'Short','Available Sizes':'S-2XL',Care:'Machine Wash',Eco:'Organic Cotton'},
+    tags:['Pack of 3','Organic Cotton','Everyday'],
+    prices:{amazon:null,flipkart:{price:999,updated:"2026-04-11T10:45:00",history:[1033,1013,999]},myntra:{price:899,updated:"2026-04-07T09:30:00",history:[930,912,899]},meesho:{price:649,updated:"2026-04-10T09:30:00",history:[671,658,649]}},
+    urls:{flipkart:'https://www.flipkart.com/search?q=H+M+cotton+t-shirt+pack',myntra:'https://www.myntra.com/tshirts/h&m',meesho:'https://meesho.com/search?q=hm+cotton+tshirt'}},
+
+  /* ── FASHION — SAREES ────────────────────────────── */
+  { id:55, cat:'Fashion', brand:'Sabyasachi', emoji:'🥻', name:'Banarasi Silk Saree', mrp:12999, rating:4.6, reviews:8700,
+    desc:'Pure Banarasi silk with zari border and blouse piece, traditional handloom weave, perfect for weddings.',
+    specs:{Material:'Pure Banarasi Silk',Length:'6.3m + blouse',Border:'Zari',Blouse:'Included',Occasion:'Wedding / Festive',Care:'Dry Clean',Weight:'850g',Origin:'Varanasi'},
+    tags:['Banarasi Silk','Zari Border','Wedding'],
+    prices:{amazon:{price:6999,updated:"2026-04-10T09:30:00",history:[7243,7103,6999]},flipkart:{price:7499,updated:"2026-04-09T14:15:00",history:[7761,7611,7499]},myntra:{price:8999,updated:"2026-04-08T11:45:00",history:[9313,9133,8999]},meesho:{price:4999,updated:"2026-04-07T18:20:00",history:[5173,5073,4999]}},
+    urls:{amazon:'https://www.amazon.in/s?k=Banarasi+silk+saree',flipkart:'https://www.flipkart.com/search?q=Banarasi+silk+saree',myntra:'https://www.myntra.com/sarees',meesho:'https://meesho.com/search?q=banarasi+silk+saree'}},
+
+  { id:56, cat:'Fashion', brand:'Fabindia', emoji:'🥻', name:'Cotton Printed Saree', mrp:3499, rating:4.4, reviews:12000,
+    desc:'Block-printed cotton saree, lightweight and breathable, ideal for daily wear and casual occasions.',
+    specs:{Material:'100% Cotton',Length:'5.5m + blouse',Print:'Block Print',Blouse:'Included',Occasion:'Daily / Casual',Care:'Machine Wash',Weight:'400g',Origin:'India'},
+    tags:['Block Print','Daily Wear','Cotton'],
+    prices:{amazon:{price:1999,updated:"2026-04-07T18:20:00",history:[2068,2028,1999]},flipkart:{price:2299,updated:"2026-04-11T07:00:00",history:[2379,2333,2299]},myntra:{price:2699,updated:"2026-04-06T22:10:00",history:[2793,2739,2699]},meesho:{price:1299,updated:"2026-04-11T16:30:00",history:[1344,1318,1299]}},
+    urls:{amazon:'https://www.amazon.in/s?k=cotton+printed+saree',flipkart:'https://www.flipkart.com/search?q=cotton+printed+saree',myntra:'https://www.myntra.com/sarees',meesho:'https://meesho.com/search?q=cotton+printed+saree'}},
+
+  /* ── FASHION — KURTAS ────────────────────────────── */
+  { id:60, cat:'Fashion', brand:'Fabindia', emoji:'👘', name:'Men\'s Cotton Kurta', mrp:2499, rating:4.5, reviews:19000,
+    desc:'Comfortable cotton kurta, classic collar, versatile design for festive and casual occasions.',
+    specs:{Material:'100% Cotton',Fit:'Regular',Neck:'Mandarin Collar',Sleeve:'Full',Length:'Thigh','Available Sizes':'S-3XL',Care:'Machine Wash',Origin:'India'},
+    tags:['Cotton','Mandarin Collar','Festive'],
+    prices:{amazon:{price:1299,updated:"2026-04-11T16:30:00",history:[1344,1318,1299]},flipkart:{price:1499,updated:"2026-04-10T08:00:00",history:[1551,1521,1499]},myntra:{price:1799,updated:"2026-04-09T20:00:00",history:[1861,1825,1799]},meesho:{price:849,updated:"2026-04-08T13:00:00",history:[878,861,849]}},
+    urls:{amazon:'https://www.amazon.in/s?k=men+cotton+kurta',flipkart:'https://www.flipkart.com/search?q=men+cotton+kurta',myntra:'https://www.myntra.com/kurtas',meesho:'https://meesho.com/search?q=men+kurta+cotton'}},
+
+  { id:61, cat:'Fashion', brand:'W', emoji:'👘', name:'Women\'s Printed Straight Kurta', mrp:1999, rating:4.4, reviews:24000,
+    desc:'Floral-printed straight kurta, side slits, 3/4 sleeves, machine washable, W brand quality.',
+    specs:{Material:'Poly Crepe',Fit:'Straight',Print:'Floral',Sleeve:'3/4',Length:'Calf','Available Sizes':'XS-3XL',Care:'Machine Wash',Origin:'India'},
+    tags:['Floral Print','Straight Fit','Women'],
+    prices:{amazon:{price:799,updated:"2026-04-08T13:00:00",history:[826,810,799]},flipkart:{price:899,updated:"2026-04-11T10:45:00",history:[930,912,899]},myntra:{price:1199,updated:"2026-04-07T09:30:00",history:[1240,1216,1199]},meesho:{price:549,updated:"2026-04-10T09:30:00",history:[568,557,549]}},
+    urls:{amazon:'https://www.amazon.in/s?k=women+printed+straight+kurta',flipkart:'https://www.flipkart.com/search?q=women+printed+straight+kurta',myntra:'https://www.myntra.com/kurtas/women',meesho:'https://meesho.com/search?q=women+printed+kurta'}},
+
+  /* ── SNEAKERS ─────────────────────────────────────── */
+  { id:70, cat:'Footwear', brand:'Nike', emoji:'👟', name:'Nike Air Max 270', mrp:11995, rating:4.6, reviews:28000,
+    desc:'Max Air unit in the heel for all-day comfort, lightweight mesh upper, iconic 270-degree air cushioning.',
+    specs:{Upper:'Mesh + Synthetic',Sole:'Air Max 270 Unit',Closure:'Lace-up',Sizes:'UK 6-12',Gender:'Unisex',Waterproof:'No',Weight:'309g',Origin:'Vietnam'},
+    tags:['Air Max','Max Air Cushion','Iconic'],
+    prices:{amazon:{price:8499,updated:"2026-04-10T09:30:00",history:[8796,8626,8499]},flipkart:{price:8999,updated:"2026-04-09T14:15:00",history:[9313,9133,8999]},myntra:{price:9495,updated:"2026-04-08T11:45:00",history:[9827,9637,9495]},meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Nike+Air+Max+270',flipkart:'https://www.flipkart.com/search?q=Nike+Air+Max+270',myntra:'https://www.myntra.com/sports-shoes/nike'}},
+
+  { id:71, cat:'Footwear', brand:'Adidas', emoji:'👟', name:'Adidas Ultraboost 22', mrp:17999, rating:4.7, reviews:16000,
+    desc:'Boost energy return, Primeknit+ upper, Continental rubber outsole, designed for distance running.',
+    specs:{Upper:'Primeknit+',Sole:'Boost + Continental Rubber',Closure:'Lace-up',Sizes:'UK 6-12',Gender:'Unisex',Waterproof:'No',Weight:'310g',Arch:'Neutral'},
+    tags:['Boost Cushioning','Primeknit+','Running'],
+    prices:{amazon:{price:12999,updated:"2026-04-07T18:20:00",history:[13453,13193,12999]},flipkart:{price:13999,updated:"2026-04-11T07:00:00",history:[14488,14208,13999]},myntra:{price:14999,updated:"2026-04-06T22:10:00",history:[15523,15223,14999]},meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Adidas+Ultraboost+22',flipkart:'https://www.flipkart.com/search?q=Adidas+Ultraboost+22',myntra:'https://www.myntra.com/sports-shoes/adidas'}},
+
+  { id:72, cat:'Footwear', brand:'Puma', emoji:'👟', name:'Puma RS-X Sneakers', mrp:7499, rating:4.3, reviews:11000,
+    desc:'Retro-chunky RS-X design, mesh and suede upper, RS foam cushioning for comfortable all-day wear.',
+    specs:{Upper:'Mesh + Synthetic Suede',Sole:'RS Foam',Closure:'Lace-up',Sizes:'UK 5-11',Gender:'Unisex',Style:'Casual/Streetwear',Weight:'290g',Origin:'China'},
+    tags:['Chunky Sole','RS Foam','Streetwear'],
+    prices:{amazon:{price:4999,updated:"2026-04-11T16:30:00",history:[5173,5073,4999]},flipkart:{price:5299,updated:"2026-04-10T08:00:00",history:[5484,5378,5299]},myntra:{price:5999,updated:"2026-04-09T20:00:00",history:[6208,6088,5999]},meesho:{price:3999,updated:"2026-04-08T13:00:00",history:[4138,4058,3999]}},
+    urls:{amazon:'https://www.amazon.in/s?k=Puma+RS-X+Sneakers',flipkart:'https://www.flipkart.com/search?q=Puma+RS-X+Sneakers',myntra:'https://www.myntra.com/casual-shoes/puma',meesho:'https://meesho.com/search?q=puma+rsx+sneakers'}},
+
+  /* ── EARPHONES WIRELESS ───────────────────────────── */
+  { id:80, cat:'Earphones', brand:'Samsung', emoji:'🎵', name:'Samsung Galaxy Buds3 Pro', mrp:17999, rating:4.6, reviews:8900,
+    desc:'ANC 2.0 with 360° Audio, 24-bit audio, ergonomic blade design, 6hr+15hr battery life.',
+    specs:{Type:'True Wireless',ANC:'ANC 2.0',Battery:'6+15 hr',Bluetooth:'5.4',Driver:'11mm',IPX:'IPX7',Codec:'Samsung 360 Audio',Charging:'USB-C + Wireless'},
+    tags:['ANC 2.0','360° Audio','IPX7'],
+    prices:{amazon:{price:14999,updated:"2026-04-08T13:00:00",history:[15523,15223,14999]},flipkart:{price:15999,updated:"2026-04-11T10:45:00",history:[16558,16238,15999]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Samsung+Galaxy+Buds3+Pro',flipkart:'https://www.flipkart.com/search?q=Samsung+Galaxy+Buds3+Pro'}},
+
+  { id:81, cat:'Earphones', brand:'boAt', emoji:'🎵', name:'boAt Airdopes 141', mrp:3990, rating:4.2, reviews:68000,
+    desc:'42 hours total playback, ENx noise cancellation for calls, 10mm drivers, instant voice assistant.',
+    specs:{Type:'True Wireless',Battery:'6+36 hr',Bluetooth:'5.0',Driver:'10mm',IPX:'IPX4',ANC:'ENx Call NC',Codec:'AAC',Charging:'USB-C'},
+    tags:['42hr Playback','ENx Mic','IPX4'],
+    prices:{amazon:{price:1499,updated:"2026-04-10T09:30:00",history:[1551,1521,1499]},flipkart:{price:1699,updated:"2026-04-09T14:15:00",history:[1758,1724,1699]},myntra:null,meesho:{price:1299,updated:"2026-04-07T18:20:00",history:[1344,1318,1299]}},
+    urls:{amazon:'https://www.amazon.in/s?k=boAt+Airdopes+141',flipkart:'https://www.flipkart.com/search?q=boAt+Airdopes+141',meesho:'https://meesho.com/search?q=boat+airdopes+141'}},
+
+  { id:82, cat:'Earphones', brand:'Nothing', emoji:'🎵', name:'Nothing Ear (2)', mrp:9999, rating:4.5, reviews:17000,
+    desc:'Hi-Res Audio certified, Active Noise Cancellation up to 40dB, 6.3mm drivers, 36hr battery.',
+    specs:{Type:'True Wireless',ANC:'Up to 40dB',Battery:'6.3+29.7hr',Bluetooth:'5.3',Driver:'11.6mm',IPX:'IP54',Codec:'LHDC 5.0',Charging:'USB-C + Wireless'},
+    tags:['Hi-Res Audio','40dB ANC','LHDC 5.0'],
+    prices:{amazon:{price:7499,updated:"2026-04-07T18:20:00",history:[7761,7611,7499]},flipkart:{price:7999,updated:"2026-04-11T07:00:00",history:[8278,8118,7999]},myntra:null,meesho:null},
+    urls:{amazon:'https://www.amazon.in/s?k=Nothing+Ear+2',flipkart:'https://www.flipkart.com/search?q=Nothing+Ear+2'}},
+];
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════ */
+const S = {
+  all:[], filtered:[], query:'',
+  category:'All', brands:[], stores:[],
+  minP:0, maxP:500000, rating:0, sort:'best',
+  view:'grid', wishlist:[], cart:[], cmpList:[],
+};
+
+/* ═══════════════════════════════════════════════════════════
+   HELPERS — updated for new price structure
+   prices[sid] = { price, updated, history } | null
+═══════════════════════════════════════════════════════════ */
+const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+
+// Extract the numeric price value from the new price object
+const getPrice = (p, sid) => {
+  const entry = p.prices[sid];
+  if (!entry) return null;
+  return typeof entry === 'object' ? entry.price : entry;
+};
+
+// Get all numeric prices for a product (non-null stores only)
+const allPrices = p =>
+  Object.keys(p.prices)
+    .map(sid => getPrice(p, sid))
+    .filter(v => v != null);
+
+// Lowest price across stores
+const getBP  = p => Math.min(...allPrices(p));
+// Highest price across stores
+const getMaxP = p => Math.max(...allPrices(p));
+// Store with lowest price
+const getBSt = p => Object.keys(p.prices).find(k => getPrice(p,k) === getBP(p));
+
+const getDisc= p => Math.round((1 - getBP(p)/p.mrp)*100);
+const starStr= r => '★'.repeat(Math.floor(r)) + '☆'.repeat(5-Math.floor(r));
+const storeUrl= (p,sid) => p.urls?.[sid] || STORES[sid].searchUrl(p.name);
+
+// ── CHANGE 2: Format a datetime string into a human-readable form
+function formatTime(dateStr) {
+  if (!dateStr) return 'Unknown';
+  try {
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now - d;
+    const diffH = Math.floor(diffMs / 3600000);
+    const diffD = Math.floor(diffMs / 86400000);
+    if (diffH < 1)  return 'Updated just now';
+    if (diffH < 24) return `Updated ${diffH}h ago`;
+    if (diffD === 1) return 'Updated yesterday';
+    if (diffD < 7)  return `Updated ${diffD} days ago`;
+    return 'Updated ' + d.toLocaleDateString('en-IN', {day:'numeric',month:'short'});
+  } catch(e) { return 'Unknown'; }
+}
+
+// ── CHANGE 5: Is this price fresh (updated within last 24 hours)?
+function isRecent(dateStr) {
+  if (!dateStr) return false;
+  try {
+    return (new Date() - new Date(dateStr)) < 86400000; // 24hr in ms
+  } catch(e) { return false; }
+}
+
+// ── CHANGE 7: Deal score 1–10 (lower price vs avg = better deal)
+function getDealScore(p) {
+  const prices = allPrices(p);
+  if (prices.length < 2) return 7; // default if only 1 store
+  const avg = prices.reduce((a,b) => a+b, 0) / prices.length;
+  const min = Math.min(...prices);
+  // Ratio: how much cheaper is the best price vs average
+  const savings = (avg - min) / avg;
+  // Scale 0–30% savings range → 1–10 score
+  const raw = Math.round(1 + Math.min(savings / 0.30, 1) * 9);
+  return Math.max(1, Math.min(10, raw));
+}
+
+// ── CHANGE 8: Price history drop text
+function getPriceHistoryNote(p, sid) {
+  const entry = p.prices[sid];
+  if (!entry || typeof entry !== 'object') return null;
+  const hist = entry.history;
+  if (!hist || hist.length < 2) return null;
+  const first = hist[0];
+  const last  = hist[hist.length - 1];
+  const drop  = first - last;
+  if (drop > 0) return `📉 Price dropped ₹${drop.toLocaleString('en-IN')} recently`;
+  return null;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SEARCH — AI-powered via Claude API, falls back to local DB
+═══════════════════════════════════════════════════════════ */
+async function runSearch(q) {
+  if (!q || !q.trim()) return;
+  q = q.trim();
+  S.query = q;
+  document.getElementById('bigInp').value = q;
+  document.getElementById('hdrInp').value = q;
+  document.getElementById('toolbar').style.display = 'flex';
+
+  // Mark active quick cat
+  document.querySelectorAll('.qc').forEach(el => {
+    el.classList.toggle('active-q', el.textContent.toLowerCase().includes(q.toLowerCase().split(' ')[0]));
+  });
+
+  // First show local results instantly
+  const localMatches = searchLocal(q);
+  S.all = localMatches;
+  buildSidebar();
+  applyFilters();
+
+  // Then enrich with AI-generated extras
+  try {
+    await enrichWithAI(q);
+  } catch(e) {/* silent */}
+}
+
+function searchLocal(q) {
+  const kw = q.toLowerCase().split(/\s+/);
+  return DB.filter(p => {
+    const hay = [p.name, p.brand, p.cat, ...(p.tags||[])].join(' ').toLowerCase();
+    return kw.some(k => hay.includes(k));
+  });
+}
+
+async function enrichWithAI(q) {
+  const prompt = `You are a product database for Indian e-commerce. For the search query "${q}", generate 6 additional products NOT already in this list: ${S.all.map(p=>p.name).join(', ')}.
+
+Return ONLY valid JSON array. Each object:
+{"id":9001,"cat":"Category","brand":"Brand","emoji":"emoji","name":"Full Product Name","mrp":0,"rating":4.2,"reviews":1000,"desc":"2 sentences.","specs":{"key":"value"},"tags":["tag1","tag2"],"prices":{"amazon":{"price":0,"updated":"2026-04-10T10:00:00","history":[0,0,0]},"flipkart":{"price":0,"updated":"2026-04-09T14:00:00","history":[0,0,0]},"myntra":null,"meesho":null},"urls":{"amazon":"https://www.amazon.in/s?k=URL_ENCODED_NAME","flipkart":"https://www.flipkart.com/search?q=URL_ENCODED_NAME","myntra":null,"meesho":null}}
+
+Rules:
+- IDs start at 9001
+- Prices realistic for India (INR). MRP 15-35% above best price.
+- Fashion/clothing → myntra & meesho prices; Electronics → amazon & flipkart.
+- URLs must be real Amazon India / Flipkart / Myntra / Meesho search URLs with the product name URL-encoded.
+- null means store doesn't sell this category.`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:3000, messages:[{role:'user',content:prompt}] })
+  });
+  const data = await res.json();
+  let text = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+  const extra = JSON.parse(text);
+  extra.forEach(p => {
+    if(p.prices) Object.keys(p.prices).forEach(k=>{ if(!p.prices[k]) delete p.prices[k]; });
+    if(!p.urls) p.urls = {};
+    // Normalise any flat-number prices from AI into proper objects
+    if(p.prices) Object.keys(p.prices).forEach(k=>{
+      const v = p.prices[k];
+      if(v != null && typeof v === 'number') {
+        p.prices[k] = { price: v, updated: new Date().toISOString().slice(0,19), history:[Math.round(v*1.03),Math.round(v*1.01),v] };
+      }
+    });
+  });
+  S.all = [...S.all, ...extra.filter(p=>Object.keys(p.prices||{}).length)];
+  buildSidebar();
+  applyFilters();
+}
+
+function hdrSearchInput(v) {
+  document.getElementById('bigInp').value = v;
+  clearTimeout(window._hst);
+  window._hst = setTimeout(() => { if(v.trim().length > 2) runSearch(v); }, 900);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════════════ */
+function buildSidebar() {
+  const cats = ['All', ...new Set(S.all.map(p=>p.cat))];
+  document.getElementById('catList').innerHTML = cats.map((c,i) => {
+    const cnt = c==='All' ? S.all.length : S.all.filter(p=>p.cat===c).length;
+    return `<div class="cat-item ${S.category===c?'active':''}" onclick="setCategory('${c}',this)">${c}<span class="cat-cnt">${cnt}</span></div>`;
+  }).join('');
+  const brands = [...new Set(S.all.map(p=>p.brand))].sort();
+  document.getElementById('brandList').innerHTML = brands.map(b=>
+    `<label class="chk-item"><input type="checkbox" value="${b}" onchange="applyFilters()"> ${b}</label>`
+  ).join('');
+}
+
+function setCategory(cat, el) {
+  S.category = cat;
+  document.querySelectorAll('.cat-item').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FILTERS
+═══════════════════════════════════════════════════════════ */
+function applyFilters() {
+  const minP = parseInt(document.getElementById('pMin').value)||0;
+  const maxP = parseInt(document.getElementById('pMax').value)||500000;
+  const rtg  = parseFloat(document.querySelector('input[name="rtg"]:checked')?.value||0);
+  const sort = document.getElementById('sortSel').value;
+  const chkB = [...document.querySelectorAll('#brandList input:checked')].map(i=>i.value);
+  const chkS = [...document.querySelectorAll('.chk-list input[type=checkbox]:checked')].filter(i=>['amazon','flipkart','myntra','meesho'].includes(i.value)).map(i=>i.value);
+
+  S.filtered = S.all.filter(p => {
+    if (!p.prices || !Object.keys(p.prices).length) return false;
+    const bp = getBP(p);
+    if(S.category!=='All' && p.cat!==S.category) return false;
+    if(chkB.length && !chkB.includes(p.brand)) return false;
+    if(chkS.length && !chkS.some(s=>getPrice(p,s)!=null)) return false;
+    if(bp<minP || bp>maxP) return false;
+    if(p.rating<rtg) return false;
+    return true;
+  });
+
+  S.filtered.sort((a,b)=>{
+    switch(sort){
+      case 'priceLow':  return getBP(a)-getBP(b);
+      case 'priceHigh': return getBP(b)-getBP(a);
+      case 'rating':    return b.rating-a.rating;
+      case 'disc':      return getDisc(b)-getDisc(a);
+      default: return (getDisc(b)-getDisc(a))||(getBP(a)-getBP(b));
+    }
+  });
+
+  renderProducts();
+  renderActiveFilters(chkB, chkS, minP, maxP, rtg);
+  document.getElementById('resInfo').innerHTML =
+    `Showing <strong>${S.filtered.length}</strong> of <strong>${S.all.length}</strong> products for "<strong>${S.query}</strong>"`;
+}
+
+function clearAllFilters() {
+  S.category='All';
+  document.getElementById('pMin').value=0;
+  document.getElementById('pMax').value=500000;
+  document.getElementById('pSlider').value=500000;
+  document.querySelectorAll('#catList .cat-item').forEach((x,i)=>{x.classList.toggle('active',i===0)});
+  document.querySelectorAll('#brandList input, .chk-list input[type=checkbox]').forEach(x=>x.checked=false);
+  const r0=document.querySelector('input[name="rtg"][value="0"]');
+  if(r0)r0.checked=true;
+  applyFilters();
+}
+
+function renderActiveFilters(brands,stores,minP,maxP,rtg) {
+  let tags=[];
+  if(S.category!=='All') tags.push({l:`📁 ${S.category}`,a:`clearAllFilters()`});
+  brands.forEach(b=>tags.push({l:`🏷 ${b}`,a:`rmBrand('${b}')`}));
+  stores.forEach(s=>tags.push({l:`${STORES[s].emoji} ${STORES[s].name}`,a:`rmStore('${s}')`}));
+  if(minP>0||maxP<500000) tags.push({l:`💰 ${fmt(minP)}–${fmt(maxP)}`,a:`clearAllFilters()`});
+  if(rtg>0) tags.push({l:`⭐ ${rtg}+`,a:`document.querySelector('input[name=\\'rtg\\'][value=\\'0\\']').checked=true;applyFilters()`});
+  document.getElementById('aftWrap').innerHTML = tags.map(t=>
+    `<div class="aft-tag">${t.l}<button onclick="${t.a}">✕</button></div>`
+  ).join('');
+}
+
+function rmBrand(b) { const el=document.querySelector(`#brandList input[value="${b}"]`); if(el){el.checked=false;applyFilters();} }
+function rmStore(s) { const el=document.querySelector(`.chk-list input[value="${s}"]`); if(el){el.checked=false;applyFilters();} }
+
+function filterByStore(sid) {
+  const el = document.querySelector(`.chk-list input[value="${sid}"]`);
+  if(el){ el.checked=true; }
+  if(!S.all.length) { runSearch('top products'); return; }
+  applyFilters();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER PRODUCTS
+═══════════════════════════════════════════════════════════ */
+function renderProducts() {
+  const g   = document.getElementById('pgrid');
+  const dis = document.getElementById('priceDisclaimer');
+  g.className = `pgrid${S.view==='list'?' lv':''}`;
+  if(!S.filtered.length) {
+    if(dis) dis.classList.remove('visible');
+    g.innerHTML=`<div class="empty-state"><div class="empty-ico">🔍</div><div class="empty-title">No products found</div><div style="color:var(--muted);font-size:.85rem">Try adjusting filters or searching something else</div></div>`;
+    return;
+  }
+  if(dis) dis.classList.add('visible');
+  g.innerHTML = S.filtered.map(renderCard).join('');
+}
+
+function renderCard(p) {
+  if(!p.prices || !Object.keys(p.prices).length) return '';
+
+  const bp   = getBP(p);
+  const maxP = getMaxP(p);
+  const bsid = getBSt(p);
+  const disc = getDisc(p);
+  const isBest = disc >= 12;
+  const isW  = S.wishlist.includes(p.id);
+  const inCmp= S.cmpList.includes(p.id);
+  const lv   = S.view === 'list';
+
+  // CHANGE 7: Deal Score
+  const score = getDealScore(p);
+  const scoreClass = score >= 8 ? 'high' : (score <= 4 ? 'low' : '');
+  const scoreFire  = score >= 8 ? '🔥' : (score >= 5 ? '💡' : '📊');
+
+  // CHANGE 6: Price range display
+  const samePrices = bp === maxP;
+  const priceDisplay = samePrices
+    ? fmt(bp)
+    : `${fmt(bp)} – ${fmt(maxP)}`;
+  const priceLabel = samePrices
+    ? 'Best indicative price'
+    : 'Price range across stores';
+
+  // Store rows — CHANGE 2 (updated time) + CHANGE 5 (only highlight if recent)
+  const storeRows = Object.entries(p.prices)
+    .filter(([,v]) => v != null)
+    .sort((a,b) => {
+      const pa = getPrice(p,a[0]), pb = getPrice(p,b[0]);
+      return pa - pb;
+    })
+    .slice(0, 4)
+    .map(([sid, entry]) => {
+      const st       = STORES[sid];
+      const price    = typeof entry === 'object' ? entry.price : entry;
+      const updStr   = typeof entry === 'object' ? entry.updated : null;
+      const fresh    = isRecent(updStr);
+      const isCheap  = sid === bsid && fresh; // CHANGE 5: only highlight if fresh
+      const timeText = formatTime(updStr);    // CHANGE 2
+      const url      = storeUrl(p, sid);
+      return `<a class="ptbl-row ${isCheap ? 'cheap' : ''}" href="${url}" target="_blank" rel="noopener noreferrer" onclick="trackBuy(event,'${sid}',${p.id})">
+        <span class="sname-wrap">
+          <span class="sdot" style="background:${st.color}"></span>
+          <span>
+            <span>${st.name}</span>
+            <div class="price-updated ${fresh ? 'fresh' : 'stale'}">${timeText}</div>
+          </span>
+        </span>
+        <span style="display:flex;align-items:center;gap:8px">
+          <span class="pamt">${fmt(price)}</span>
+          <span class="buy-link">Check Latest Price →</span>
+        </span>
+      </a>`;
+    }).join('');
+
+  const storeDots = Object.keys(p.prices).filter(k => getPrice(p,k) != null).map(k =>
+    `<span class="sstrip-dot" title="${STORES[k].name}" style="background:${STORES[k].color}"></span>`
+  ).join('');
+
+  return `<div class="pcard ${isBest ? 'is-best' : ''} ${lv ? 'lv' : ''}" id="pc-${p.id}">
+    ${isBest ? '<div class="best-badge">🏆 BEST DEAL</div>' : ''}
+    <button class="wish-btn ${isW ? 'on' : ''}" onclick="toggleWish(event,${p.id})">${isW ? '♥' : '♡'}</button>
+    <div class="pimg-wrap">
+      <span class="pimg-emoji">${p.emoji}</span>
+      ${disc > 0 ? `<div class="dtag">${disc}% OFF</div>` : ''}
+      <div class="store-strip">${storeDots}</div>
+    </div>
+    <div class="pbody">
+      <div class="pbrand">${p.brand}</div>
+      <div class="pname">${p.name}</div>
+      <div class="pspecs">${Object.entries(p.specs||{}).slice(0,3).map(([k,v])=>`<span class="schip">${k}: ${v}</span>`).join('')}</div>
+      <div class="prating"><span class="sstar">${starStr(p.rating)}</span> <strong>${p.rating}</strong><span class="rcnt">(${p.reviews.toLocaleString('en-IN')})</span></div>
+      <div class="pmrp">MRP: <s>${fmt(p.mrp)}</s></div>
+      <div class="deal-score ${scoreClass}">${scoreFire} Deal Score: ${score}/10</div>
+      <div class="price-range">${priceDisplay}</div>
+      <div class="price-range-label">${priceLabel}</div>
+      <div class="ptbl">${storeRows}</div>
+      <div class="pfoot">
+        <button class="btn-cmp" onclick="toggleCmp(${p.id})">${inCmp ? '✓ Added' : '⇄ Compare'}</button>
+        <button class="btn-view" onclick="openModal(${p.id})">View Details →</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function trackBuy(event, sid, pid) {
+  // allow natural href redirect but show toast
+  const p = S.all.find(x=>x.id===pid);
+  if(p) showToast(STORES[sid].emoji, `Verify latest price on ${STORES[sid].name}`);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════════════ */
+function openModal(id) {
+  const p = S.all.find(x=>x.id===id); if(!p) return;
+  document.getElementById('mBrandTag').textContent = p.brand + ' · ' + p.cat;
+  document.getElementById('mBody').scrollTop = 0;
+  const bp   = getBP(p);
+  const bsid = getBSt(p);
+  const score = getDealScore(p);
+  const scoreClass = score >= 8 ? 'high' : (score <= 4 ? 'low' : '');
+  const scoreFire  = score >= 8 ? '🔥' : (score >= 5 ? '💡' : '📊');
+
+  const specs = Object.entries(p.specs||{}).map(([k,v])=>
+    `<div><div class="mspec-k">${k}</div><div class="mspec-v">${v}</div></div>`
+  ).join('');
+
+  // CHANGE 8: Price history note for best store
+  const histNote = getPriceHistoryNote(p, bsid);
+  const histHtml = histNote
+    ? `<div class="price-history-note">${histNote}</div>`
+    : `<div class="price-history-note no-drop">📊 No recent price drop detected</div>`;
+
+  const pRows = Object.entries(p.prices)
+    .filter(([,v]) => v != null)
+    .sort((a,b) => getPrice(p,a[0]) - getPrice(p,b[0]))
+    .map(([sid, entry]) => {
+      const st    = STORES[sid];
+      const price = typeof entry === 'object' ? entry.price : entry;
+      const updStr= typeof entry === 'object' ? entry.updated : null;
+      const fresh = isRecent(updStr);
+      const ib    = sid === bsid;
+      const url   = storeUrl(p, sid);
+      // CHANGE 5: only mark as best if the price is recent
+      const isBestRow = ib && fresh;
+      return `<div class="mprow ${isBestRow ? 'best-mprow' : ''}">
+        <div class="mstore-info">
+          <div class="mstore-ico">${st.emoji}</div>
+          <div>
+            <div class="mstore-name">${st.name}</div>
+            <div class="mstore-tag" style="color:${isBestRow ? 'var(--accent3)' : 'var(--muted)'}">
+              ${isBestRow ? '✓ Lowest (verified recent)' : (ib ? '✓ Lowest (verify on site)' : `+${fmt(price-bp)} more`)}
+            </div>
+            <div class="mprice-updated ${fresh ? 'fresh' : ''}">${formatTime(updStr)}</div>
+          </div>
+        </div>
+        <div class="mprow-right">
+          <div class="mpval" style="${isBestRow ? 'color:var(--accent3)' : ''}">${fmt(price)}</div>
+          <a class="buy-now-btn" style="color:${st.btnColor};background:${st.btnBg};border-color:${st.btnBg}" href="${url}" target="_blank" rel="noopener noreferrer" onclick="addToCart(${id},'${sid}',${price});showToast('${st.emoji}','Opening ${st.name} — verify price before buying')">
+            Check Latest Price →
+          </a>
+        </div>
+      </div>`;
+    }).join('');
+
+  const isW = S.wishlist.includes(id);
+  document.getElementById('mBody').innerHTML = `
+    <div>
+      <div class="modal-img-box">${p.emoji}</div>
+    </div>
+    <div>
+      <div class="modal-name">${p.name}</div>
+      <div class="modal-stars">
+        <span style="color:var(--gold)">${starStr(p.rating)}</span>
+        <strong>${p.rating}</strong>
+        <span style="color:var(--muted);font-size:.82rem">(${p.reviews.toLocaleString('en-IN')} reviews)</span>
+      </div>
+      <div class="modal-desc">${p.desc}</div>
+      <div style="margin-bottom:16px">
+        <div class="modal-price-title">📋 Specifications</div>
+        <div class="modal-specs-grid">${specs}</div>
+      </div>
+      <div>
+        <div class="modal-price-title" style="display:flex;align-items:center;justify-content:space-between">
+          <span>💰 Indicative Prices — Verify on Store</span>
+          <span class="deal-score ${scoreClass}" style="margin-bottom:0">${scoreFire} ${score}/10</span>
+        </div>
+        <div style="font-size:.73rem;color:var(--muted);margin-bottom:8px">MRP: <s>${fmt(p.mrp)}</s> · Indicative savings up to <span style="color:var(--accent3);font-weight:700">${fmt(p.mrp-bp)} (${getDisc(p)}%)</span></div>
+        ${histHtml}
+        ${pRows}
+      </div>
+      <div class="modal-cta">
+        <button class="m-wish-btn" onclick="toggleWish(null,${id})">${isW ? '♥ Wishlisted' : '♡ Add to Wishlist'}</button>
+        <button class="m-cart-btn" onclick="addToCart(${id},'${bsid}',${bp});showToast('🛒','Added to cart — verify price on store!')">🛒 Add to Cart</button>
+      </div>
+    </div>`;
+  document.getElementById('moverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal() {
+  document.getElementById('moverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REDIRECT MODAL
+═══════════════════════════════════════════════════════════ */
+function openRedirect(p, sid, price) {
+  const st = STORES[sid];
+  const url = storeUrl(p, sid);
+  document.getElementById('rIcon').textContent = st.emoji;
+  document.getElementById('rTitle').textContent = `Buy on ${st.name}`;
+  document.getElementById('rSub').innerHTML = `You're leaving PricePulse and going to <strong>${st.name}</strong>.<br>Please <strong>verify the latest price</strong> for <strong>${p.name}</strong> on the store before completing your purchase. Our listed price (${fmt(price)}) is indicative only.`;
+  const btn = document.getElementById('rBtn');
+  btn.textContent = `Verify Price & Continue on ${st.name} →`;
+  btn.href = url;
+  btn.style.background = st.btnBg;
+  btn.style.color = st.btnColor;
+  document.getElementById('rOverlay').classList.add('open');
+}
+function closeRedirect() { document.getElementById('rOverlay').classList.remove('open'); }
+
+/* ═══════════════════════════════════════════════════════════
+   WISHLIST
+═══════════════════════════════════════════════════════════ */
+function toggleWish(e, id) {
+  if(e) e.stopPropagation();
+  const i = S.wishlist.indexOf(id);
+  if(i===-1){ S.wishlist.push(id); showToast('♥','Added to wishlist'); }
+  else       { S.wishlist.splice(i,1); showToast('♡','Removed from wishlist'); }
+  renderProducts(); renderWishlist(); updBadges();
+  // update modal button if open
+  const mb = document.getElementById('mBody');
+  const wBtn = mb?.querySelector('.m-wish-btn');
+  if(wBtn) wBtn.textContent = S.wishlist.includes(id) ? '♥ Wishlisted' : '♡ Add to Wishlist';
+}
+
+function renderWishlist() {
+  const b = document.getElementById('wishBody');
+  if(!S.wishlist.length) { b.innerHTML=`<div class="sp-empty"><div class="sp-empty-ico">♡</div><div>Wishlist is empty</div></div>`; return; }
+  b.innerHTML = S.wishlist.map(id => {
+    const p = S.all.find(x=>x.id===id); if(!p) return '';
+    const bp=getBP(p), bsid=getBSt(p), url=storeUrl(p,bsid);
+    const bEntry = p.prices[bsid];
+    const updStr = bEntry && typeof bEntry === 'object' ? bEntry.updated : null;
+    const fresh  = isRecent(updStr);
+    return `<div class="ci">
+      <div class="ci-img">${p.emoji}</div>
+      <div class="ci-info">
+        <div class="ci-name">${p.name}</div>
+        <div class="ci-meta">${STORES[bsid].emoji} ${STORES[bsid].name} — Indicative price</div>
+        <div class="ci-price">${fmt(bp)}</div>
+        <div class="price-updated ${fresh ? 'fresh' : 'stale'}">${formatTime(updStr)}</div>
+        <div class="ci-actions">
+          <a class="ci-buy-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="showToast('${STORES[bsid].emoji}','Verify latest price on ${STORES[bsid].name}…')">Check Latest Price →</a>
+          <button style="background:none;border:1px solid var(--border);padding:4px 9px;border-radius:6px;font-size:.68rem;color:var(--text);cursor:pointer" onclick="addToCart(${id},'${bsid}',${bp})">+ Cart</button>
+        </div>
+      </div>
+      <button class="ci-rm" onclick="toggleWish(null,${id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CART
+═══════════════════════════════════════════════════════════ */
+function addToCart(pid, sid, price) {
+  const p=S.all.find(x=>x.id===pid); const st=STORES[sid];
+  if(!p) return;
+  S.cart.push({pid, sid, price, p, st, url:storeUrl(p,sid)});
+  renderCart(); updBadges();
+  showToast('🛒', `Added from ${st.name}`);
+}
+
+function rmCart(i) { S.cart.splice(i,1); renderCart(); updBadges(); }
+
+function renderCart() {
+  const b=document.getElementById('cartBody'), f=document.getElementById('cartFooter');
+  if(!S.cart.length) { b.innerHTML=`<div class="sp-empty"><div class="sp-empty-ico">🛒</div><div>Cart is empty</div></div>`; f.style.display='none'; return; }
+  b.innerHTML = S.cart.map((item,i)=>`
+    <div class="ci">
+      <div class="ci-img">${item.p.emoji}</div>
+      <div class="ci-info">
+        <div class="ci-name">${item.p.name}</div>
+        <div class="ci-meta">${item.st.emoji} ${item.st.name}</div>
+        <div class="ci-price">${fmt(item.price)}</div>
+        <div class="ci-actions">
+          <a class="ci-buy-link" href="${item.url}" target="_blank" rel="noopener noreferrer" onclick="showToast('${item.st.emoji}','Verify latest price on ${item.st.name}')">Check Latest Price →</a>
+        </div>
+      </div>
+      <button class="ci-rm" onclick="rmCart(${i})">✕</button>
+    </div>`).join('');
+  document.getElementById('cartTotal').textContent = fmt(S.cart.reduce((s,i)=>s+i.price,0));
+  f.style.display = 'block';
+}
+
+function checkoutAll() {
+  if(!S.cart.length) return;
+  // Open each store URL in new tab
+  const uniqueStores = [...new Set(S.cart.map(i=>i.sid))];
+  uniqueStores.forEach((sid,idx) => {
+    const items = S.cart.filter(i=>i.sid===sid);
+    setTimeout(() => {
+      window.open(storeUrl(items[0].p, sid), '_blank');
+      showToast(STORES[sid].emoji, `Opening ${STORES[sid].name}…`);
+    }, idx * 600);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PANELS
+═══════════════════════════════════════════════════════════ */
+function togglePanel(type) {
+  if(type==='cart') {
+    document.getElementById('cartPanel').classList.toggle('open');
+    document.getElementById('wishPanel').classList.remove('open');
+  } else {
+    document.getElementById('wishPanel').classList.toggle('open');
+    document.getElementById('cartPanel').classList.remove('open');
+  }
+}
+document.addEventListener('click', e => {
+  ['cartPanel','wishPanel'].forEach(id => {
+    const el=document.getElementById(id);
+    if(el.classList.contains('open') && !el.contains(e.target) && !e.target.closest('.ico-btn'))
+      el.classList.remove('open');
+  });
+});
+
+function updBadges() {
+  const cb=document.getElementById('cBdg'), wb=document.getElementById('wBdg');
+  cb.textContent=S.cart.length; cb.style.display=S.cart.length?'flex':'none';
+  wb.textContent=S.wishlist.length; wb.style.display=S.wishlist.length?'flex':'none';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   COMPARE
+═══════════════════════════════════════════════════════════ */
+function toggleCmp(id) {
+  const i=S.cmpList.indexOf(id);
+  if(i===-1) { if(S.cmpList.length>=3){showToast('⚠️','Max 3 products');return;} S.cmpList.push(id); showToast('⇄','Added to compare'); }
+  else { S.cmpList.splice(i,1); }
+  renderProducts(); renderCmpBar();
+}
+function renderCmpBar() {
+  const bar=document.getElementById('cmpBar'), slots=document.getElementById('cmpSlots');
+  if(!S.cmpList.length){bar.classList.remove('vis');return;}
+  bar.classList.add('vis');
+  slots.innerHTML = S.cmpList.map(id=>{const p=S.all.find(x=>x.id===id);return`<div class="cmp-slot filled"><span class="cmp-slot-img">${p.emoji}</span><span class="cmp-slot-name">${p.name.slice(0,22)}</span><button class="cmp-x" onclick="toggleCmp(${id})">✕</button></div>`;}).join('');
+  for(let i=S.cmpList.length;i<3;i++) slots.innerHTML+=`<div class="cmp-slot"><span style="font-size:1.2rem;opacity:.3">+</span></div>`;
+}
+function clearCmp(){S.cmpList=[];renderProducts();renderCmpBar();document.getElementById('cmpView').classList.remove('vis');}
+function showCmpView() {
+  if(S.cmpList.length<2){showToast('ℹ️','Select 2+ products');return;}
+  const ps=S.cmpList.map(id=>S.all.find(p=>p.id===id));
+  const allK=[...new Set(ps.flatMap(p=>Object.keys(p.specs||{})))];
+  const cv=document.getElementById('cmpView');
+  const hdrs=ps.map(p=>`<th style="min-width:140px">${p.emoji} ${p.name}</th>`).join('');
+  const pRow=ps.map(p=>{const bp=getBP(p);const mb=Math.min(...ps.map(x=>getBP(x)));return`<td class="${bp===mb?'best-cell':''}">${fmt(bp)}<div style="font-size:.62rem;color:var(--muted);margin-top:2px">(indicative)</div></td>`;}).join('');
+  const rRow=ps.map(p=>{const mx=Math.max(...ps.map(x=>x.rating));return`<td class="${p.rating===mx?'best-cell':''}">${p.rating} ★</td>`;}).join('');
+  const dRow=ps.map(p=>{const d=getDisc(p);const mx=Math.max(...ps.map(x=>getDisc(x)));return`<td class="${d===mx?'best-cell':''}">${d}%</td>`;}).join('');
+  const sRows=allK.map(k=>`<tr><td class="row-lbl">${k}</td>${ps.map(p=>`<td>${p.specs?.[k]||'—'}</td>`).join('')}</tr>`).join('');
+  cv.innerHTML=`<div style="padding:14px 16px 0;display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Syne',sans-serif;font-weight:700">⇄ Side-by-Side Comparison</span><button onclick="clearCmp()" style="background:none;border:none;color:var(--muted);cursor:pointer">✕ Close</button></div><div style="overflow-x:auto"><table class="cmptbl"><thead><tr><th>Spec</th>${hdrs}</tr></thead><tbody><tr><td class="row-lbl">Best Price</td>${pRow}</tr><tr><td class="row-lbl">Rating</td>${rRow}</tr><tr><td class="row-lbl">Discount</td>${dRow}</tr>${sRows}</tbody></table></div>`;
+  cv.classList.add('vis');
+  cv.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ═══════════════════════════════════════════════════════════
+   VIEW / MISC
+═══════════════════════════════════════════════════════════ */
+function setView(v,btn) {
+  S.view=v;
+  document.querySelectorAll('.vbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+function resetHome() {
+  S.query=''; S.all=[]; S.filtered=[];
+  document.getElementById('bigInp').value='';
+  document.getElementById('hdrInp').value='';
+  document.getElementById('toolbar').style.display='none';
+  document.getElementById('pgrid').innerHTML='<div class="empty-state"><div class="empty-ico">🔍</div><div class="empty-title">Search for any product</div><div style="color:var(--muted);font-size:.88rem">Type a product name or tap a category above</div></div>';
+  const dis=document.getElementById('priceDisclaimer'); if(dis) dis.classList.remove('visible');
+  document.getElementById('aftWrap').innerHTML='';
+  document.querySelectorAll('.qc').forEach(x=>x.classList.remove('active-q'));
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════════ */
+function showToast(ico, msg, dur=2800) {
+  const w=document.getElementById('twrap');
+  const t=document.createElement('div'); t.className='toast';
+  t.innerHTML=`<span class="t-ico">${ico}</span><span class="t-msg">${msg}</span>`;
+  w.appendChild(t);
+  setTimeout(()=>{t.style.cssText='opacity:0;transform:translateX(22px);transition:.22s';setTimeout(()=>t.remove(),230);},dur);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INIT — load popular products on start
+═══════════════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  document.getElementById('statProducts').textContent = DB.length+'+';
+});
+</script>
+</body>
+</html>
